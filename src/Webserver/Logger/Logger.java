@@ -1,4 +1,4 @@
-package Webserver.Log;
+package Webserver.Logger;
 
 public class Logger {
 	private Logger() {}

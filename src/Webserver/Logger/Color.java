@@ -1,4 +1,4 @@
-package Webserver.Log;
+package Webserver.Logger;
 
 public abstract class Color {
 	public static String WHITE = "\u001B[37m";

@@ -1,4 +1,4 @@
-import Webserver.Response;
+import Webserver.Response.HTML;
 import Webserver.Route;
 
 public class Root extends Route {
@@ -8,6 +8,7 @@ public class Root extends Route {
 
 	@Override
 	public String response() {
-		return Response.HTML(GetFileContent("src/index.html"));
+		HTML response = new HTML(GetFileContent("src/index.html"));
+		return response.getResponse();
 	}
 }

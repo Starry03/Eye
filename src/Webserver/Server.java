@@ -1,6 +1,6 @@
 package Webserver;
 
-import Webserver.Log.Logger;
+import Webserver.Logger.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -26,7 +26,7 @@ Response are standardized, just need bytes as parameter
 ```java
 public class Root extends Route {
 	public Root() {
-		setPath("/");
+		super("/");
 	}
 
 	@Override

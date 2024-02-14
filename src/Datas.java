@@ -1,14 +1,14 @@
+import Webserver.Response.JSON;
 import Webserver.Route;
-import Webserver.Response;
 
 public class Datas extends Route {
 	public Datas() {
 		super("/datas");
-		setPath("/datas");
 	}
 
 	@Override
 	public String response() {
-		return Response.JSON(GetFileContent("src/datas.json"));
+		JSON response = new JSON(GetFileContent("src/datas.json"));
+		return response.getResponse();
 	}
 }
