@@ -1,4 +1,4 @@
-package StarryServerConfig.Log;
+package Webserver.Log;
 
 public abstract class Color {
 	public static String WHITE = "\u001B[37m";

@@ -1,5 +1,5 @@
-import StarryServerConfig.Route;
-import StarryServerConfig.Response;
+import Webserver.Route;
+import Webserver.Response;
 
 public class Datas extends Route {
 	public Datas() {

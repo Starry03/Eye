@@ -1,4 +1,4 @@
-package StarryServerConfig.Log;
+package Webserver.Log;
 
 public class Logger {
 	private Logger() {}

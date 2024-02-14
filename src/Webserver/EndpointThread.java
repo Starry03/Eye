@@ -1,6 +1,6 @@
-package StarryServerConfig;
+package Webserver;
 
-import StarryServerConfig.Log.Logger;
+import Webserver.Log.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
