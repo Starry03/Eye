@@ -5,7 +5,9 @@ import Webserver.Logger.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class Server implements Runnable{
+public class Server implements Runnable {
+	private boolean executed;
+	private boolean running;
 	private final ServerSocket serverSocket;
 	private final RoutesHandler routesHandler;
 
@@ -19,9 +21,14 @@ public class Server implements Runnable{
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
+		if (executed) return;
+		executed = true;
+		ServerSafeStopper serverSafeStopper = new ServerSafeStopper(this);
+		Thread serverSafeStopperThread = new Thread(serverSafeStopper);
+		serverSafeStopperThread.start();
 		Logger.info("server started");
-		while (true) {
+		while (running) {
 			try {
 				EndpointThread endpointThread = new EndpointThread(
 						serverSocket.accept(),
@@ -41,5 +48,17 @@ public class Server implements Runnable{
 
 	public int getPort() {
 		return serverSocket.getLocalPort();
+	}
+
+	public synchronized boolean isExecuted() {
+		return executed;
+	}
+
+	public synchronized boolean isRunning() {
+		return running;
+	}
+
+	public synchronized void setRunning(boolean running) {
+		this.running = running;
 	}
 }

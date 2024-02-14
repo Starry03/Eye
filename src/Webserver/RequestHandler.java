@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class RequestHandler {
-	private final Scanner scanner;
 	private String path;
 	private String method;
 	private String protocol;
@@ -22,7 +21,6 @@ public class RequestHandler {
 	private final HashMap<String, String> queryParams;
 
 	public RequestHandler(InputStream inputStream) {
-		this.scanner = new Scanner(inputStream, StandardCharsets.UTF_8);
 		this.path = "";
 		this.method = "";
 		this.protocol = "";
@@ -35,10 +33,11 @@ public class RequestHandler {
 		this.cookie = "";
 		this.time = LocalTime.now();
 		this.queryParams = new HashMap<>();
-		this.parseRequest();
+		this.parseRequest(inputStream);
 	}
 
-	private void parseRequest() {
+	private void parseRequest(InputStream inputStream) {
+		Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8);
 		String line = scanner.nextLine();
 		String[] requestLine = line.split(" ");
 		this.method = requestLine[0];
@@ -58,9 +57,8 @@ public class RequestHandler {
 			this.protocol = requestLine[2];
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
-			if (line.isEmpty()) {
+			if (line.isEmpty())
 				break;
-			}
 			String[] header = line.split(": ");
 			switch (header[0]) {
 				case "Host":
@@ -86,6 +84,7 @@ public class RequestHandler {
 					break;
 			}
 		}
+		scanner.close();
 	}
 
 	public String getPath() {
@@ -139,7 +138,6 @@ public class RequestHandler {
 	@Override
 	public String toString() {
 		return "RequestHandler{" +
-				"scanner=" + scanner +
 				", path='" + path + '\'' +
 				", method='" + method + '\'' +
 				", protocol='" + protocol + '\'' +

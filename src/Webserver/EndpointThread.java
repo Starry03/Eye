@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class EndpointThread implements Runnable {
+	private boolean executed;
 	private final RoutesHandler routesHandler;
 	private final Socket socket;
 
@@ -21,7 +22,7 @@ public class EndpointThread implements Runnable {
 			socket.close();
 			Logger.info("connection closed");
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			Logger.error(e.getMessage());
 		}
 	}
 
@@ -33,26 +34,29 @@ public class EndpointThread implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
+		if (executed) return;
+		executed = true;
 		PrintWriter out;
 		RequestHandler requestHandler;
 		try {
 			out = new PrintWriter(socket.getOutputStream());
 			requestHandler = new RequestHandler(socket.getInputStream());
 			String path = requestHandler.getPath();
-			String response = "";
-			for (Route router : routesHandler.routers) {
+			for (Route router : routesHandler.getRouters())
 				if (router.getPath().equals(path)) {
-					response = router.response();
-					out.write(response);
+					out.write(router.response());
 					out.flush();
 					break;
 				}
-			}
 			closeConnection(out);
 			Logger.info(requestLog(requestHandler));
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			Logger.error(e.getMessage());
 		}
+	}
+
+	public synchronized boolean isExecuted() {
+		return executed;
 	}
 }

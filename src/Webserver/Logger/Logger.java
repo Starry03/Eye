@@ -10,13 +10,26 @@ public class Logger {
 	private static void setDefault() {
 		System.out.println(defaultColor);
 	}
+	public static void setRed() {
+		System.out.println(Color.RED);
+	}
+	public static void setGreen() {
+		System.out.println(Color.GREEN);
+	}
 	private static void setBlue() {
 		System.out.println(Color.BLUE);
 	}
 	public static void info(String message) {
-		setBlue();
+		setGreen();
 		System.out.println("--- INFO ---");
-		System.out.println(message);
 		setDefault();
+		System.out.println(message);
+	}
+
+	public static void error(String message) {
+		setRed();
+		System.out.println("--- ERROR ---");
+		setDefault();
+		System.out.println(message);
 	}
 }

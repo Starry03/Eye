@@ -3,14 +3,19 @@ package Webserver;
 import java.util.LinkedList;
 
 public class RoutesHandler {
-    public LinkedList<Route> routers = new LinkedList<>();
-    public RoutesHandler() {}
+    private final LinkedList<Route> routers;
+    public RoutesHandler() {
+        routers = new LinkedList<>();
+    }
 
     public void addRouter(Route router) {
-        routers.add(router);
+        routers.addFirst(router);
     }
     
     public void removeRouter(Route router) {
         routers.remove(router);
+    }
+    public LinkedList<Route> getRouters() {
+        return routers;
     }
 }
