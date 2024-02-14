@@ -15,7 +15,7 @@ public class Logger {
 	}
 	public static void info(String message) {
 		setBlue();
-		System.out.println("\t\t--- INFO ---");
+		System.out.println("--- INFO ---");
 		System.out.println(message);
 		setDefault();
 	}

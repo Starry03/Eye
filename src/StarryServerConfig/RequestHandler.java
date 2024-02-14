@@ -40,7 +40,8 @@ public class RequestHandler {
 		String[] requestLine = line.split(" ");
 		this.method = requestLine[0];
 		this.path = requestLine[1];
-		this.protocol = requestLine[2];
+		if (scanner.hasNextLine())
+			this.protocol = requestLine[2];
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
 			if (line.isEmpty()) {

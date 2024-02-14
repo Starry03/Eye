@@ -1,5 +1,7 @@
 package StarryServerConfig;
 
+import StarryServerConfig.Log.Logger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -19,6 +21,7 @@ public class Server implements Runnable{
 
 	@Override
 	public void run() {
+		Logger.info("server started");
 		while (true) {
 			try {
 				EndpointThread endpointThread = new EndpointThread(

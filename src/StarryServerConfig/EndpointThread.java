@@ -9,7 +9,6 @@ import java.net.Socket;
 public class EndpointThread implements Runnable {
 	private final RoutesHandler routesHandler;
 	private final Socket socket;
-	private static final String CLOSE = "close";
 
 	public EndpointThread(Socket socket, RoutesHandler routesHandler) {
 		this.socket = socket;
@@ -36,28 +35,23 @@ public class EndpointThread implements Runnable {
 	public void run() {
 		PrintWriter out;
 		RequestHandler requestHandler;
-		while (true) {
-			try {
-				out = new PrintWriter(socket.getOutputStream());
-				requestHandler = new RequestHandler(socket.getInputStream());
-				String path = requestHandler.getPath();
-				if (path.equals(CLOSE)) {
-					closeConnection(out);
-					return;
+		try {
+			out = new PrintWriter(socket.getOutputStream());
+			requestHandler = new RequestHandler(socket.getInputStream());
+			String path = requestHandler.getPath();
+			String response = "";
+			for (Route router : routesHandler.routers) {
+				if (router.getPath().equals(path)) {
+					response = router.response();
+					out.write(response);
+					out.flush();
+					break;
 				}
-				String response = "";
-				for (Route router : routesHandler.routers) {
-					if (router.getPath().equals(path)) {
-						response = router.response();
-						out.write(response);
-						out.flush();
-						break;
-					}
-				}
-				Logger.info(requestLog(requestHandler));
-			} catch (IOException e) {
-				throw new RuntimeException(e);
 			}
+			closeConnection(out);
+			Logger.info(requestLog(requestHandler));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
