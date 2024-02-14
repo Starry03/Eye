@@ -8,14 +8,13 @@ import java.io.FileReader;
 public abstract class Route {
 	private String path;
 
-	/**
-	 * override this method to return a response
-	 */
-
 	public Route(String path) {
 		this.path = path;
 	}
 
+	/**
+	 * Override this method to return a response
+	 */
 	public String response() {
 		return "";
 	}

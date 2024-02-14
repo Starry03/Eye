@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public class Server implements Runnable{
-
 	private final ServerSocket serverSocket;
 	private final RoutesHandler routesHandler;
 

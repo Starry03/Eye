@@ -26,9 +26,10 @@ public class EndpointThread implements Runnable {
 	}
 
 	private String requestLog(RequestHandler requestHandler) {
-		return "Request received from " + requestHandler.getHost() +
-				" at " + requestHandler.getTime() +
-				" for " + requestHandler.getPath();
+		return "Request from: " + requestHandler.getHost() + "\n" +
+				"Time: " + requestHandler.getTime() + "\n" +
+				"Path: " + requestHandler.getPath() + "\n" +
+				"Parameters: " + requestHandler.getQueryParams() + "\n";
 	}
 
 	@Override

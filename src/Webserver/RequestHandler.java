@@ -3,6 +3,7 @@ package Webserver;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class RequestHandler {
@@ -18,6 +19,7 @@ public class RequestHandler {
 	private String connection;
 	private String cookie;
 	private final LocalTime time;
+	private final HashMap<String, String> queryParams;
 
 	public RequestHandler(InputStream inputStream) {
 		this.scanner = new Scanner(inputStream, StandardCharsets.UTF_8);
@@ -32,6 +34,7 @@ public class RequestHandler {
 		this.connection = "";
 		this.cookie = "";
 		this.time = LocalTime.now();
+		this.queryParams = new HashMap<>();
 		this.parseRequest();
 	}
 
@@ -39,7 +42,18 @@ public class RequestHandler {
 		String line = scanner.nextLine();
 		String[] requestLine = line.split(" ");
 		this.method = requestLine[0];
-		this.path = requestLine[1];
+
+		if (requestLine[1].contains("?")) {
+			String[] res = requestLine[1].split("\\?");
+			this.path = res[0];
+			String[] params = res[1].split("&");
+			for (String parameter: params) {
+				String[] values = parameter.split("=");
+				queryParams.put(values[0], values[1]);
+			}
+		}
+		else this.path = requestLine[1];
+
 		if (scanner.hasNextLine())
 			this.protocol = requestLine[2];
 		while (scanner.hasNextLine()) {
@@ -118,9 +132,13 @@ public class RequestHandler {
 		return time;
 	}
 
+	public HashMap<String, String> getQueryParams() {
+		return queryParams;
+	}
+
 	@Override
 	public String toString() {
-		return "StarryServerConfig.RequestHandler{" +
+		return "RequestHandler{" +
 				"scanner=" + scanner +
 				", path='" + path + '\'' +
 				", method='" + method + '\'' +
