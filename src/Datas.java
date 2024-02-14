@@ -3,6 +3,7 @@ import StarryServerConfig.Response;
 
 public class Datas extends Route {
 	public Datas() {
+		super("/datas");
 		setPath("/datas");
 	}
 

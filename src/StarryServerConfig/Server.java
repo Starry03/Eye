@@ -3,7 +3,7 @@ package StarryServerConfig;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class Server {
+public class Server implements Runnable{
 
 	private final ServerSocket serverSocket;
 	private final RoutesHandler routesHandler;
@@ -17,6 +17,7 @@ public class Server {
 		}
 	}
 
+	@Override
 	public void run() {
 		while (true) {
 			try {

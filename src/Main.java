@@ -8,6 +8,7 @@ public class Main {
 		routesHandler.addRouter(new SettingsPage());
 		routesHandler.addRouter(new Datas());
 		Server server = new Server(7777, routesHandler);
-		server.run();
+		Thread serverThread = new Thread(server);
+		serverThread.start();
 	}
 }

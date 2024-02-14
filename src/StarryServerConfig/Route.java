@@ -11,6 +11,11 @@ public abstract class Route {
 	/**
 	 * override this method to return a response
 	 */
+
+	public Route(String path) {
+		this.path = path;
+	}
+
 	public String response() {
 		return "";
 	}

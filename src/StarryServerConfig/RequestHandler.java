@@ -17,7 +17,7 @@ public class RequestHandler {
 	private String acceptEncoding;
 	private String connection;
 	private String cookie;
-	private LocalTime time;
+	private final LocalTime time;
 
 	public RequestHandler(InputStream inputStream) {
 		this.scanner = new Scanner(inputStream, StandardCharsets.UTF_8);

@@ -3,7 +3,7 @@ import StarryServerConfig.Route;
 
 public class Root extends Route {
 	public Root() {
-		setPath("/");
+		super("/");
 	}
 
 	@Override

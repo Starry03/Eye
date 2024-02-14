@@ -3,7 +3,7 @@ import StarryServerConfig.Route;
 
 public class SettingsPage extends Route {
 	public SettingsPage() {
-		setPath("/settings");
+		super("/settings");
 	}
 
 	@Override
