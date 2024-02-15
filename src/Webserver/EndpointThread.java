@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 final class EndpointThread implements Runnable {
-	private boolean executed;
+	private boolean executed = false;
 	private final RoutesHandler routesHandler;
 	private final Socket socket;
 

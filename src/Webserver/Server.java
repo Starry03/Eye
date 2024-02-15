@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 
 public class Server implements Runnable {
 	private boolean executed;
-	private boolean running;
+	private boolean running = true;
 	private final ServerSocket serverSocket;
 	private final RoutesHandler routesHandler;
 
