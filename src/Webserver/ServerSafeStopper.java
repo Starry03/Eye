@@ -18,6 +18,9 @@ class ServerSafeStopper implements Runnable {
 		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
 		Logger.info("server stopped");
+		Logger.info("Threads running:");
+		for (Thread t : Thread.getAllStackTraces().keySet())
+			System.out.println(t.getName());
 		server.setRunning(false);
 	}
 

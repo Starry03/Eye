@@ -27,7 +27,7 @@ public class RequestHandler {
 	}
 
 	private void buildQueryParams(String[] params) {
-		for (String parameter: params) {
+		for (String parameter : params) {
 			String[] values = parameter.split("=");
 			queryParams.put(values[0], values[1]);
 		}
@@ -38,16 +38,12 @@ public class RequestHandler {
 		String line = scanner.nextLine();
 		String[] requestLine = line.split(" ");
 		this.method = requestLine[0];
-
 		if (requestLine[1].contains("?")) {
 			String[] res = requestLine[1].split("\\?");
 			this.path = res[0];
 			this.buildQueryParams(res[1].split("&"));
-		}
-		else this.path = requestLine[1];
-
-		if (scanner.hasNextLine())
-			this.protocol = requestLine[2];
+		} else this.path = requestLine[1];
+		this.protocol = requestLine[2];
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
 			if (line.isEmpty())
@@ -131,7 +127,7 @@ public class RequestHandler {
 	@Override
 	public String toString() {
 		return "RequestHandler{" +
-				", path='" + path + '\'' +
+				"path='" + path + '\'' +
 				", method='" + method + '\'' +
 				", protocol='" + protocol + '\'' +
 				", host='" + host + '\'' +

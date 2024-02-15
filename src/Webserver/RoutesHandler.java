@@ -1,21 +1,21 @@
 package Webserver;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 
 public class RoutesHandler {
-    private final LinkedList<Route> routers;
+    private final HashMap<String, Route> routers;
     public RoutesHandler() {
-        routers = new LinkedList<>();
+        routers = new HashMap<>();
     }
 
     public void addRouter(Route router) {
-        routers.addFirst(router);
+        routers.put(router.getPath(), router);
     }
     
     public void removeRouter(Route router) {
-        routers.remove(router);
+        routers.remove(router.getPath());
     }
-    public LinkedList<Route> getRouters() {
+    public HashMap<String, Route> getRouters() {
         return routers;
     }
 }

@@ -1,5 +1,7 @@
 package Webserver.Response;
 
+import Webserver.Logger.Logger;
+
 import java.nio.charset.StandardCharsets;
 
 public abstract class Response {
@@ -20,8 +22,10 @@ public abstract class Response {
 	}
 
 	public String getResponse() {
-		if (content == null)
+		if (content == null) {
+			Logger.error("response content is null");
 			return SERVER_ERROR;
+		}
 
 		return POSITIVE_RESPONSE +
 				contentType +
@@ -36,5 +40,14 @@ public abstract class Response {
 
 	public String getContentType() {
 		return contentType;
+	}
+
+	@Override
+	public String toString() {
+		return "Response{" +
+				"content='" + content + '\'' +
+				", contentType='" + contentType + '\'' +
+				", contentLength=" + contentLength +
+				'}';
 	}
 }
