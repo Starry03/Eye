@@ -1,5 +1,7 @@
 package Webserver;
 
+import Webserver.Logger.Logger;
+
 import java.io.IOException;
 import java.io.File;
 import java.io.FileReader;
@@ -21,7 +23,7 @@ public abstract class Route {
 
 	@Override
 	public String toString() {
-		return "RouterExecutable{" +
+		return "Route{" +
 				"path='" + path + '\'' +
 				'}';
 	}
@@ -32,13 +34,12 @@ public abstract class Route {
 			FileReader fileReader = new FileReader(file);
 			StringBuilder content = new StringBuilder();
 			int i;
-			while ((i = fileReader.read()) != -1) {
+			while ((i = fileReader.read()) != -1)
 				content.append((char) i);
-			}
 			fileReader.close();
 			return content.toString();
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			Logger.error(e.getMessage());
 			return "";
 		}
 	}

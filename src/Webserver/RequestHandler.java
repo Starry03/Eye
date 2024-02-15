@@ -21,19 +21,16 @@ public class RequestHandler {
 	private final HashMap<String, String> queryParams;
 
 	public RequestHandler(InputStream inputStream) {
-		this.path = "";
-		this.method = "";
-		this.protocol = "";
-		this.host = "";
-		this.userAgent = "";
-		this.accept = "";
-		this.acceptLanguage = "";
-		this.acceptEncoding = "";
-		this.connection = "";
-		this.cookie = "";
 		this.time = LocalTime.now();
 		this.queryParams = new HashMap<>();
 		this.parseRequest(inputStream);
+	}
+
+	private void buildQueryParams(String[] params) {
+		for (String parameter: params) {
+			String[] values = parameter.split("=");
+			queryParams.put(values[0], values[1]);
+		}
 	}
 
 	private void parseRequest(InputStream inputStream) {
@@ -45,11 +42,7 @@ public class RequestHandler {
 		if (requestLine[1].contains("?")) {
 			String[] res = requestLine[1].split("\\?");
 			this.path = res[0];
-			String[] params = res[1].split("&");
-			for (String parameter: params) {
-				String[] values = parameter.split("=");
-				queryParams.put(values[0], values[1]);
-			}
+			this.buildQueryParams(res[1].split("&"));
 		}
 		else this.path = requestLine[1];
 
