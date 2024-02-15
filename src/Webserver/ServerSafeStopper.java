@@ -4,7 +4,7 @@ import Webserver.Logger.Logger;
 
 import java.util.Scanner;
 
-public class ServerSafeStopper implements Runnable {
+class ServerSafeStopper implements Runnable {
 	private boolean executed;
 	private final Server server;
 	public ServerSafeStopper(Server server) {

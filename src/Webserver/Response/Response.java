@@ -1,6 +1,5 @@
 package Webserver.Response;
 
-
 import java.nio.charset.StandardCharsets;
 
 public abstract class Response {
@@ -10,11 +9,13 @@ public abstract class Response {
 	protected String content;
 	protected String contentType;
 	protected int contentLength;
+
 	protected Response(String content, String contentType) {
 		this.content = content;
+		this.contentType = contentType;
 	}
 
-	protected int getContentLength(String content) {
+	protected int getContentLength() {
 		return content.getBytes(StandardCharsets.UTF_8).length;
 	}
 
@@ -24,8 +25,16 @@ public abstract class Response {
 
 		return POSITIVE_RESPONSE +
 				contentType +
-				"Content-Length: " + getContentLength(content) + "\r\n" +
+				"Content-Length: " + getContentLength() + "\r\n" +
 				"\r\n" +
 				content;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public String getContentType() {
+		return contentType;
 	}
 }
