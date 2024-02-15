@@ -23,7 +23,7 @@ public class Logger {
 		setGreen();
 		System.out.println("--- INFO ---");
 		setDefault();
-		System.out.println(message);
+		System.out.print(message);
 	}
 
 	public static void error(String message) {

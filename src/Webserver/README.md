@@ -9,6 +9,8 @@ All you need is:
 - create and start the server passing a port number and the RoutesHandler instance
 
 ```java
+import Test.Root;
+
 public class Main {
 	public static void main(String[] args) {
 		RoutesHandler routesHandler = new RoutesHandler();
