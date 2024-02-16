@@ -1,11 +1,8 @@
 package Eye.Logger;
 
-public class Logger {
-	private Logger() {
-	}
-
+public abstract class Logger {
+	private static boolean isActive = true;
 	private static String defaultColor = Color.WHITE;
-
 	public static void setDefaultColor(String color) {
 		defaultColor = color;
 	}
@@ -14,35 +11,30 @@ public class Logger {
 		System.out.print(defaultColor);
 	}
 
-	public static void setRed() {
-		System.out.print(Color.RED);
+	public static void setActive(boolean active) {
+		isActive = active;
 	}
 
-	public static void setGreen() {
-		System.out.print(Color.GREEN);
-	}
-
-	private static void setBlue() {
-		System.out.print(Color.BLUE);
+	public static boolean isActive() {
+		return isActive;
 	}
 
 	public static void info(String message) {
-		setGreen();
-		System.out.println("--- INFO ---");
-		setDefault();
-		System.out.println(message);
+		log(message, Color.GREEN, "--- INFO ---");
 	}
 
 	public static void error(String message) {
-		setRed();
-		System.out.println("--- ERROR ---");
-		setDefault();
-		System.out.println(message);
+		log(message, Color.RED, "--- ERROR ---");
 	}
 
 	public static void warning(String message) {
-		setBlue();
-		System.out.println("--- WARNING ---");
+		log(message, Color.ORANGE, "--- WARNING ---");
+	}
+
+	private static void log(String message, String color, String label) {
+		if (!isActive) return;
+		System.out.print(color);
+		System.out.println(label);
 		setDefault();
 		System.out.println(message);
 	}
