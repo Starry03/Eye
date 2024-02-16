@@ -6,6 +6,7 @@ import Webserver.Response.NotFound;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 final class EndpointThread implements Runnable {
 	private boolean executed = false;
@@ -36,15 +37,17 @@ final class EndpointThread implements Runnable {
 	}
 
 	@Override
-	public synchronized void run() {
+	public void run() {
 		if (executed) return;
 		executed = true;
 		PrintWriter out;
+		Scanner scanner;
 		RequestHandler requestHandler;
 		String response;
 		try {
 			out = new PrintWriter(socket.getOutputStream());
-			requestHandler = new RequestHandler(socket.getInputStream());
+			scanner = new Scanner(socket.getInputStream());
+			requestHandler = new RequestHandler(scanner);
 			Logger.info(requestHandler.toString());
 			String path = requestHandler.getPath();
 			Route route = routesHandler.getRouters().get(path);

@@ -1,5 +1,7 @@
 package Webserver;
 
+import Webserver.Logger.Logger;
+
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
@@ -20,10 +22,10 @@ public class RequestHandler {
 	private final LocalTime time;
 	private final HashMap<String, String> queryParams;
 
-	public RequestHandler(InputStream inputStream) {
+	public RequestHandler(Scanner scanner) {
 		this.time = LocalTime.now();
 		this.queryParams = new HashMap<>();
-		this.parseRequest(inputStream);
+		this.parseRequest(scanner);
 	}
 
 	private void buildQueryParams(String[] params) {
@@ -33,8 +35,7 @@ public class RequestHandler {
 		}
 	}
 
-	private void parseRequest(InputStream inputStream) {
-		Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8);
+	private void parseRequest(Scanner scanner) {
 		String line = scanner.nextLine();
 		String[] requestLine = line.split(" ");
 		this.method = requestLine[0];
@@ -73,7 +74,6 @@ public class RequestHandler {
 					break;
 			}
 		}
-		scanner.close();
 	}
 
 	public String getPath() {

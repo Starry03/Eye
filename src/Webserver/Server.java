@@ -21,8 +21,7 @@ public class Server implements Runnable {
 	}
 
 	@Override
-	public synchronized void run() {
-		int count = 0;
+	public void run() {
 		if (executed) return;
 		executed = true;
 		ServerSafeStopper serverSafeStopper = new ServerSafeStopper(this);
@@ -30,14 +29,12 @@ public class Server implements Runnable {
 		serverSafeStopperThread.start();
 		Logger.info("server started");
 		while (running) {
-			if (count > 1000) count = 0;
 			try {
 				EndpointThread endpointThread = new EndpointThread(
 						serverSocket.accept(),
 						routesHandler
 				);
 				Thread thread = new Thread(endpointThread);
-				thread.setName("EndpointThread: " + count++);
 				thread.start();
 			} catch (IOException exception) {
 				Logger.error(exception.getMessage());
