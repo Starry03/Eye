@@ -1,6 +1,6 @@
-package Webserver;
+package Eye;
 
-import Webserver.Logger.Logger;
+import Eye.Logger.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;

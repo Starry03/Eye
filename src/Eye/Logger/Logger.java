@@ -1,6 +1,4 @@
-package Webserver.Logger;
-
-import java.awt.*;
+package Eye.Logger;
 
 public class Logger {
 	private Logger() {

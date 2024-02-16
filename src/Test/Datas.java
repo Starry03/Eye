@@ -1,8 +1,8 @@
 package Test;
 
-import Webserver.Local.LocalUtils;
-import Webserver.Response.JSON;
-import Webserver.Route;
+import Eye.Local.LocalUtils;
+import Eye.Response.JSON;
+import Eye.Route;
 
 import java.io.IOException;
 

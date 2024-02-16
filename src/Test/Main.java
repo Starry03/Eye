@@ -1,7 +1,7 @@
 package Test;
 
-import Webserver.RoutesHandler;
-import Webserver.Server;
+import Eye.RoutesHandler;
+import Eye.Server;
 
 public class Main {
 	public static void main(String[] args) {

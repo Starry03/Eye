@@ -1,6 +1,6 @@
-package Webserver.Response;
+package Eye.Response;
 
-import Webserver.Logger.Logger;
+import Eye.Logger.Logger;
 
 import java.nio.charset.StandardCharsets;
 

@@ -1,4 +1,4 @@
-package Webserver.Response;
+package Eye.Response;
 
 public final class JSON extends Response {
 	public JSON(String content) {

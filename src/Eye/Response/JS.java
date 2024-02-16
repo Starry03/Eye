@@ -1,4 +1,4 @@
-package Webserver.Response;
+package Eye.Response;
 
 public final class JS extends Response{
 	public JS(String content) {

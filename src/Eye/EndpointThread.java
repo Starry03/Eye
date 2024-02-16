@@ -1,8 +1,8 @@
-package Webserver;
+package Eye;
 
-import Webserver.Local.LocalUtils;
-import Webserver.Logger.Logger;
-import Webserver.Response.Response;
+import Eye.Local.LocalUtils;
+import Eye.Logger.Logger;
+import Eye.Response.Response;
 
 import java.io.*;
 import java.net.Socket;

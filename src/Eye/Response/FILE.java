@@ -1,4 +1,4 @@
-package Webserver.Response;
+package Eye.Response;
 
 public final class FILE extends Response {
 	public FILE(byte[] content, String contentType) {

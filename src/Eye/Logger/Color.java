@@ -1,4 +1,4 @@
-package Webserver.Logger;
+package Eye.Logger;
 
 public abstract class Color {
 	public static String WHITE = "\u001B[38m";

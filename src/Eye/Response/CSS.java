@@ -1,4 +1,4 @@
-package Webserver.Response;
+package Eye.Response;
 
 public final class CSS extends Response {
 	public CSS(String content) {
