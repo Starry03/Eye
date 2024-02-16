@@ -25,7 +25,7 @@ public abstract class Response {
 	public String getResponse() {
 		if (content == null) {
 			Logger.error("response content is null");
-			return SERVER_ERROR;
+			return NOT_FOUND;
 		}
 
 		return OK +

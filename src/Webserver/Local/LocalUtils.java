@@ -5,12 +5,11 @@ import Webserver.Logger.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class LocalUtils {
 	public static byte[] GetBinaryFileContent(String path) throws IOException {
 		try {
-			Path filePath = Paths.get(path);
+			Path filePath = Path.of(path);
 			return Files.readAllBytes(filePath);
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
