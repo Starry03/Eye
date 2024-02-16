@@ -41,4 +41,11 @@ public class Logger {
 		setDefault();
 		System.out.println(message);
 	}
+
+	public static void warning(String message) {
+		setBlue();
+		System.out.println("--- WARNING ---");
+		setDefault();
+		System.out.println(message);
+	}
 }

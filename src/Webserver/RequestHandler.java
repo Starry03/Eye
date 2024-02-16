@@ -1,9 +1,5 @@
 package Webserver;
 
-import Webserver.Logger.Logger;
-
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Scanner;

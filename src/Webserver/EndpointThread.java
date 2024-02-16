@@ -1,26 +1,30 @@
 package Webserver;
 
+import Webserver.Local.LocalUtils;
 import Webserver.Logger.Logger;
-import Webserver.Response.NotFound;
+import Webserver.Response.Response;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 final class EndpointThread implements Runnable {
 	private boolean executed = false;
 	private final RoutesHandler routesHandler;
 	private final Socket socket;
+	private final OutputStream outputStream;
+	private final InputStream inputStream;
 
-	public EndpointThread(Socket socket, RoutesHandler routesHandler) {
+	public EndpointThread(Socket socket, RoutesHandler routesHandler) throws IOException {
 		this.socket = socket;
+		this.outputStream = socket.getOutputStream();
+		this.inputStream = socket.getInputStream();
 		this.routesHandler = routesHandler;
 	}
 
-	private void closeConnection(PrintWriter out) {
+	private void closeConnection() {
 		try {
-			out.close();
 			socket.close();
 			Logger.info("connection closed");
 		} catch (IOException e) {
@@ -37,31 +41,43 @@ final class EndpointThread implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 		if (executed) return;
 		executed = true;
-		PrintWriter out;
 		Scanner scanner;
 		RequestHandler requestHandler;
 		String response;
 		try {
-			out = new PrintWriter(socket.getOutputStream());
-			scanner = new Scanner(socket.getInputStream());
+			scanner = new Scanner(this.inputStream);
 			requestHandler = new RequestHandler(scanner);
 			Logger.info(requestHandler.toString());
 			String path = requestHandler.getPath();
 			Route route = routesHandler.getRouters().get(path);
-			if (route == null) {
-				Logger.error("Route not found");
-				response = new NotFound().getResponse();
-			} else response = route.response();
-			out.write(response);
-			out.flush();
-			closeConnection(out);
-			// Logger.info(requestLog(requestHandler, response));
+			if (route != null) {
+				sendResponse(route.response());
+				return;
+			}
+			Logger.error("Route not found");
+			try {
+				byte[] content = LocalUtils.GetBinaryFileContent("src/test" + path);
+				sendResponse(content);
+			} catch (IOException e) {
+				Logger.error(e.getMessage());
+				sendResponse(Response.NOT_FOUND);
+			}
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
 		}
+	}
+
+	private void sendResponse(byte[] response) throws IOException {
+		outputStream.write(response);
+		outputStream.flush();
+		closeConnection();
+	}
+
+	private void sendResponse(String response) throws IOException {
+		sendResponse(response.getBytes(StandardCharsets.UTF_8));
 	}
 
 	public synchronized boolean isExecuted() {

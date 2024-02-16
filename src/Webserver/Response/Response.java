@@ -6,8 +6,9 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class Response {
 	// private static final String CSP = "Content-Security-Policy: default-src 'self' http://localhost:7777;\r\n";
-	protected static final String POSITIVE_RESPONSE = "HTTP/1.1 200 OK\r\n";
-	protected static final String SERVER_ERROR = "HTTP/1.1 500 Internal Server Error\r\n";
+	public static final String OK = "HTTP/1.1 200 OK\r\n";
+	public static final String NOT_FOUND = "HTTP/1.1 404 Not Found\r\n";
+	public static final String SERVER_ERROR = "HTTP/1.1 500 Internal Server Error\r\n";
 	protected String content;
 	protected String contentType;
 	protected int contentLength;
@@ -27,7 +28,7 @@ public abstract class Response {
 			return SERVER_ERROR;
 		}
 
-		return POSITIVE_RESPONSE +
+		return OK +
 				contentType +
 				"Content-Length: " + getContentLength() + "\r\n" +
 				"\r\n" +

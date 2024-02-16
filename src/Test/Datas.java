@@ -1,7 +1,10 @@
 package Test;
 
+import Webserver.Local.LocalUtils;
 import Webserver.Response.JSON;
 import Webserver.Route;
+
+import java.io.IOException;
 
 public class Datas extends Route {
 	public Datas() {
@@ -9,8 +12,8 @@ public class Datas extends Route {
 	}
 
 	@Override
-	public String response() {
-		JSON response = new JSON(GetFileContent("src/datas.json"));
+	public String response() throws IOException {
+		JSON response = new JSON(LocalUtils.GetFileContent("src/datas.json"));
 		return response.getResponse();
 	}
 }

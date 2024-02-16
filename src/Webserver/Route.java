@@ -1,12 +1,7 @@
 package Webserver;
 
-import Webserver.Logger.Logger;
-
 import java.io.IOException;
-import java.io.File;
-import java.io.FileReader;
 
-@SuppressWarnings("SameParameterValue")
 public abstract class Route {
 	private String path;
 
@@ -17,7 +12,7 @@ public abstract class Route {
 	/**
 	 * Override this method to return a response
 	 */
-	public String response() {
+	public String response() throws IOException {
 		return "";
 	}
 
@@ -26,22 +21,6 @@ public abstract class Route {
 		return "Route{" +
 				"path='" + path + '\'' +
 				'}';
-	}
-
-	protected String GetFileContent(String path) {
-		try {
-			File file = new File(path);
-			FileReader fileReader = new FileReader(file);
-			StringBuilder content = new StringBuilder();
-			int i;
-			while ((i = fileReader.read()) != -1)
-				content.append((char) i);
-			fileReader.close();
-			return content.toString();
-		} catch (IOException e) {
-			Logger.error(e.getMessage());
-			return "";
-		}
 	}
 
 	public String getPath() {

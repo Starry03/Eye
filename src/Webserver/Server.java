@@ -21,7 +21,7 @@ public class Server implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 		if (executed) return;
 		executed = true;
 		ServerSafeStopper serverSafeStopper = new ServerSafeStopper(this);
