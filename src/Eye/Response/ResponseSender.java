@@ -9,8 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public class ResponseSender {
-
+public abstract class ResponseSender {
 	public static void send(String path, OutputStream outputStream, RoutesHandler routesHandler) {
 		Route route = routesHandler.getRoutes().get(path);
 		if (route != null)
