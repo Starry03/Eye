@@ -19,8 +19,8 @@ public class Main {
 		int PORT = 7777;
 
 		RoutesHandler routesHandler = new RoutesHandler();
-		routesHandler.addRouter(new Root());
-		routesHandler.addRouter(new Datas());
+		routesHandler.addRoute(new Root());
+		routesHandler.addRoute(new Datas());
 		Server server = new Server(PORT, routesHandler);
 		Thread serverThread = new Thread(server);
 		serverThread.start();
@@ -36,7 +36,7 @@ Response are standardized, just need bytes as parameter
 package Test;
 
 import Eye.Response.HTML;
-import Eye.Local.LocalUtils;
+import Eye.Local.FileManager;
 import Eye.Route;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class Root extends Route {
 
 	@Override
 	public String response() throws IOException {
-		HTML response = new HTML(LocalUtils.GetFileContent("src/Test/index.html"));
+		HTML response = new HTML(FileManager.GetFileContent("src/Test/index.html"));
 		return response.getResponse();
 	}
 }

@@ -1,6 +1,6 @@
 package Eye;
 
-import Eye.Local.LocalUtils;
+import Eye.Local.FileManager;
 import Eye.Logger.Logger;
 import Eye.Response.FILE;
 import Eye.Response.Response;
@@ -50,7 +50,7 @@ class EndpointThread implements Runnable {
 		Scanner scanner = new Scanner(this.inputStream);
 		RequestHandler requestHandler = new RequestHandler(scanner);
 		String path = requestHandler.getPath();
-		Route route = routesHandler.getRouters().get(path);
+		Route route = routesHandler.getRoutes().get(path);
 		if (route != null) {
 			try {
 				sendResponse(route.response());
@@ -63,7 +63,7 @@ class EndpointThread implements Runnable {
 		}
 		Logger.warning("Route not found");
 		try {
-			byte[] content = LocalUtils.GetBinaryFileContent(path);
+			byte[] content = FileManager.GetBinaryFileContent(path);
 			FILE f = new FILE(content, "file/unknown");
 			sendResponse(f.getByteResponse());
 			Logger.info(path + " located and sent");

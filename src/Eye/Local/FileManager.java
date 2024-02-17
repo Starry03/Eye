@@ -7,7 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class LocalUtils {
+public class FileManager {
+
 	public static byte[] GetBinaryFileContent(String path) throws IOException {
 		return GetBinaryFileContent(Path.of(path));
 	}

@@ -1,6 +1,6 @@
 package Test;
 
-import Eye.Local.LocalUtils;
+import Eye.Local.FileManager;
 import Eye.Response.JSON;
 import Eye.Route;
 
@@ -13,7 +13,7 @@ public class Datas extends Route {
 
 	@Override
 	public String response() throws IOException {
-		JSON response = new JSON(LocalUtils.GetFileContent("datas.json"));
+		JSON response = new JSON(FileManager.GetFileContent("datas.json"));
 		return response.getResponse();
 	}
 }
