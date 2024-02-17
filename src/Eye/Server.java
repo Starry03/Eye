@@ -29,20 +29,21 @@ public class Server implements Runnable {
 		ServerSafeStopper serverSafeStopper = new ServerSafeStopper(this);
 		Thread serverSafeStopperThread = new Thread(serverSafeStopper);
 		serverSafeStopperThread.start();
-		Logger.info("server started");
+		Logger.info("Server started\n");
 		while (running) {
 			try {
 				EndpointThread endpointThread = new EndpointThread(
 						serverSocket.accept(),
 						routesHandler
 				);
+				if (!running) break;
 				Thread thread = new Thread(endpointThread);
 				thread.start();
 			} catch (IOException exception) {
 				Logger.error(exception.getMessage());
 			}
 		}
-		Logger.info("Server shutted down");
+		Logger.info("Server stopped\n");
 	}
 
 	public RoutesHandler getRoutesHandler() {

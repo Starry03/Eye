@@ -1,9 +1,7 @@
 package Eye;
 
-import Eye.Local.FileManager;
 import Eye.Logger.Logger;
-import Eye.Response.FILE;
-import Eye.Response.Response;
+import Eye.Response.ResponseSender;
 
 import java.io.*;
 import java.net.Socket;
@@ -27,13 +25,13 @@ class EndpointThread implements Runnable {
 	private void closeConnection() {
 		try {
 			socket.close();
-			Logger.info("connection closed");
+			Logger.info("End: connection closed\n");
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
 		}
 	}
 
-	private String requestLog(RequestHandler requestHandler, String response) {
+	public String getActivity(RequestHandler requestHandler, String response) {
 		return "Request from: " + requestHandler.getHost() + "\n" +
 				"Time: " + requestHandler.getTime() + "\n" +
 				"Path: " + requestHandler.getPath() + "\n" +
@@ -45,34 +43,13 @@ class EndpointThread implements Runnable {
 	public synchronized void run() {
 		if (executed) return;
 		executed = true;
-		Logger.info("connection opened");
-		String response;
-		Scanner scanner = new Scanner(this.inputStream);
+		Logger.info("Start: connection opened");
+		Scanner scanner = new Scanner(inputStream);
 		RequestHandler requestHandler = new RequestHandler(scanner);
 		String path = requestHandler.getPath();
-		Route route = routesHandler.getRoutes().get(path);
-		if (route != null) {
-			try {
-				sendResponse(route.response());
-				Logger.info("Reponse sent: " + path);
-			} catch (IOException e) {
-				Logger.error(e.getMessage());
-			}
-			closeConnection();
-			return;
-		}
-		Logger.warning("Route not found");
-		try {
-			byte[] content = FileManager.GetBinaryFileContent(path);
-			FILE f = new FILE(content, "file/unknown");
-			sendResponse(f.getByteResponse());
-			Logger.info(path + " located and sent");
-		} catch (IOException e) {
-			sendResponse(Response.NOT_FOUND);
-			Logger.error(e.getMessage());
-			Logger.error("file not found");
-		}
+		ResponseSender.send(path, outputStream, routesHandler);
 		closeConnection();
+		scanner.close();
 	}
 
 	private void sendResponse(byte[] response) {

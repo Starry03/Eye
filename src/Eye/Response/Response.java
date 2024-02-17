@@ -21,7 +21,7 @@ public abstract class Response {
 		return content.getBytes(StandardCharsets.UTF_8).length;
 	}
 
-	protected String getEmptyReponse() {
+	protected String getEmptyResponse() {
 		return OK +
 				contentType +
 				"Content-Length:" +
@@ -36,7 +36,7 @@ public abstract class Response {
 			return NOT_FOUND;
 		}
 
-		return getEmptyReponse() + content;
+		return getEmptyResponse() + content;
 	}
 
 	public String getContent() {
