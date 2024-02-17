@@ -21,17 +21,22 @@ public abstract class Response {
 		return content.getBytes(StandardCharsets.UTF_8).length;
 	}
 
+	protected String getEmptyReponse() {
+		return OK +
+				contentType +
+				"Content-Length:" +
+				getContentLength() +
+				"\r\n" +
+				"\r\n";
+	}
+
 	public String getResponse() {
 		if (content == null) {
 			Logger.error("response content is null");
 			return NOT_FOUND;
 		}
 
-		return OK +
-				contentType +
-				"Content-Length: " + getContentLength() + "\r\n" +
-				"\r\n" +
-				content;
+		return getEmptyReponse() + content;
 	}
 
 	public String getContent() {

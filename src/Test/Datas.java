@@ -13,7 +13,7 @@ public class Datas extends Route {
 
 	@Override
 	public String response() throws IOException {
-		JSON response = new JSON(LocalUtils.GetFileContent("src/datas.json"));
+		JSON response = new JSON(LocalUtils.GetFileContent("src/Test/datas.json"));
 		return response.getResponse();
 	}
 }

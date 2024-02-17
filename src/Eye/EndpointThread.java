@@ -2,6 +2,7 @@ package Eye;
 
 import Eye.Local.LocalUtils;
 import Eye.Logger.Logger;
+import Eye.Response.FILE;
 import Eye.Response.Response;
 
 import java.io.*;
@@ -61,12 +62,12 @@ class EndpointThread implements Runnable {
 			}
 			closeConnection();
 			return;
-
 		}
 		Logger.warning("Route not found");
 		try {
 			byte[] content = LocalUtils.GetBinaryFileContent(rootPath + path);
-			sendResponse(content);
+			FILE f = new FILE(content, "file/unknown");
+			sendResponse(f.getByteResponse());
 			Logger.info(path + " located and sent");
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
