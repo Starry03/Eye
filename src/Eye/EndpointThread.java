@@ -70,7 +70,7 @@ class EndpointThread implements Runnable {
 		} catch (IOException e) {
 			sendResponse(Response.NOT_FOUND);
 			Logger.error(e.getMessage());
-			Logger.warning("file not found");
+			Logger.error("file not found");
 		}
 		closeConnection();
 	}

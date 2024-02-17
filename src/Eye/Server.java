@@ -4,13 +4,14 @@ import Eye.Logger.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.nio.file.Path;
 
 public class Server implements Runnable {
 	private boolean executed = false;
 	private boolean running = true;
 	private final ServerSocket serverSocket;
 	private final RoutesHandler routesHandler;
-	private static String rootPath = "./";
+	private static Path rootPath = Path.of("./");
 
 	public Server(int port, RoutesHandler routesHandler) throws RuntimeException {
 		this.routesHandler = routesHandler;
@@ -64,11 +65,11 @@ public class Server implements Runnable {
 		this.running = running;
 	}
 
-	public static String getRootPath() {
+	public static Path getRootPath() {
 		return rootPath;
 	}
 
-	public static void setRootPath(String rootPath) {
-		Server.rootPath = rootPath;
+	public static void setRootPath(String path) {
+		Server.rootPath = Path.of(path);
 	}
 }
