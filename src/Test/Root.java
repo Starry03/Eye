@@ -13,7 +13,7 @@ public class Root extends Route {
 
 	@Override
 	public String response() throws IOException {
-		HTML response = new HTML(LocalUtils.GetFileContent("src/Test/index.html"));
+		HTML response = new HTML(LocalUtils.GetFileContent("index.html"));
 		return response.getResponse();
 	}
 }

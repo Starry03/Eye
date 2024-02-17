@@ -16,14 +16,12 @@ class EndpointThread implements Runnable {
 	private final Socket socket;
 	private final OutputStream outputStream;
 	private final InputStream inputStream;
-	private final String rootPath;
 
-	public EndpointThread(Socket socket, RoutesHandler routesHandler, String rootPath) throws IOException {
+	public EndpointThread(Socket socket, RoutesHandler routesHandler) throws IOException {
 		this.socket = socket;
 		this.outputStream = socket.getOutputStream();
 		this.inputStream = socket.getInputStream();
 		this.routesHandler = routesHandler;
-		this.rootPath = rootPath;
 	}
 
 	private void closeConnection() {
@@ -65,14 +63,14 @@ class EndpointThread implements Runnable {
 		}
 		Logger.warning("Route not found");
 		try {
-			byte[] content = LocalUtils.GetBinaryFileContent(rootPath + path);
+			byte[] content = LocalUtils.GetBinaryFileContent(path);
 			FILE f = new FILE(content, "file/unknown");
 			sendResponse(f.getByteResponse());
 			Logger.info(path + " located and sent");
 		} catch (IOException e) {
+			sendResponse(Response.NOT_FOUND);
 			Logger.error(e.getMessage());
 			Logger.warning("file not found");
-			sendResponse(Response.NOT_FOUND);
 		}
 		closeConnection();
 	}

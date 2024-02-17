@@ -10,20 +10,10 @@ public class Server implements Runnable {
 	private boolean running = true;
 	private final ServerSocket serverSocket;
 	private final RoutesHandler routesHandler;
-	private String rootPath = "./";
+	private static String rootPath = "./";
 
 	public Server(int port, RoutesHandler routesHandler) throws RuntimeException {
 		this.routesHandler = routesHandler;
-		try {
-			this.serverSocket = new ServerSocket(port);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public Server(int port, RoutesHandler routesHandler, String rootPath) throws RuntimeException {
-		this.routesHandler = routesHandler;
-		this.rootPath = rootPath;
 		try {
 			this.serverSocket = new ServerSocket(port);
 		} catch (IOException e) {
@@ -43,8 +33,7 @@ public class Server implements Runnable {
 			try {
 				EndpointThread endpointThread = new EndpointThread(
 						serverSocket.accept(),
-						routesHandler,
-						rootPath
+						routesHandler
 				);
 				Thread thread = new Thread(endpointThread);
 				thread.start();
@@ -75,7 +64,11 @@ public class Server implements Runnable {
 		this.running = running;
 	}
 
-	public String getRootPath() {
+	public static String getRootPath() {
 		return rootPath;
+	}
+
+	public static void setRootPath(String rootPath) {
+		Server.rootPath = rootPath;
 	}
 }
