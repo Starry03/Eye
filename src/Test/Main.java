@@ -10,7 +10,7 @@ public class Main {
 		RoutesHandler routesHandler = new RoutesHandler();
 		routesHandler.addRouter(new Root());
 		routesHandler.addRouter(new Datas());
-		Server server = new Server(PORT, routesHandler);
+		Server server = new Server(PORT, routesHandler, "src/Test");
 		Thread serverThread = new Thread(server);
 		serverThread.start();
 	}

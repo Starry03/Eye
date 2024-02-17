@@ -9,14 +9,21 @@ All you need is:
 - create and start the server passing a port number and the RoutesHandler instance
 
 ```java
-import Test.Root;
+package Test;
+
+import Eye.RoutesHandler;
+import Eye.Server;
 
 public class Main {
 	public static void main(String[] args) {
+		int PORT = 7777;
+
 		RoutesHandler routesHandler = new RoutesHandler();
-		routesHandler.addRouter(new Root()); // add route to LinkedList
-		Server server = new Server(7777, routesHandler);
-		server.run();
+		routesHandler.addRouter(new Root());
+		routesHandler.addRouter(new Datas());
+		Server server = new Server(PORT, routesHandler);
+		Thread serverThread = new Thread(server);
+		serverThread.start();
 	}
 }
 ```
@@ -26,16 +33,26 @@ public class Main {
 Response are standardized, just need bytes as parameter
 
 ```java
+package Test;
+
+import Eye.Response.HTML;
+import Eye.Local.LocalUtils;
+import Eye.Route;
+
+import java.io.IOException;
+
 public class Root extends Route {
 	public Root() {
 		super("/");
 	}
 
 	@Override
-	public String response() {
-		return Response.HTML(GetFileContent("src/index.html"));
+	public String response() throws IOException {
+		HTML response = new HTML(LocalUtils.GetFileContent("src/Test/index.html"));
+		return response.getResponse();
 	}
 }
+
 ```
 
 ## Classes

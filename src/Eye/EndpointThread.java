@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-final class EndpointThread implements Runnable {
+class EndpointThread implements Runnable {
 	private boolean executed = false;
 	private final RoutesHandler routesHandler;
 	private final Socket socket;
@@ -46,36 +46,46 @@ final class EndpointThread implements Runnable {
 	public synchronized void run() {
 		if (executed) return;
 		executed = true;
+		Logger.info("connection opened");
 		String response;
-		try {
-			Scanner scanner = new Scanner(this.inputStream);
-			RequestHandler requestHandler = new RequestHandler(scanner);
-			String path = requestHandler.getPath();
-			Route route = routesHandler.getRouters().get(path);
-			if (route != null) {
-				sendResponse(route.response());
-				return;
-			}
-			Logger.error("Route not found");
+		Scanner scanner = new Scanner(this.inputStream);
+		RequestHandler requestHandler = new RequestHandler(scanner);
+		String path = requestHandler.getPath();
+		Route route = routesHandler.getRouters().get(path);
+		if (route != null) {
 			try {
-				byte[] content = LocalUtils.GetBinaryFileContent(rootPath + path);
-				sendResponse(content);
+				sendResponse(route.response());
+				Logger.info("Reponse sent: " + path);
 			} catch (IOException e) {
 				Logger.error(e.getMessage());
-				sendResponse(Response.NOT_FOUND);
 			}
+			closeConnection();
+			return;
+
+		}
+		Logger.warning("Route not found");
+		try {
+			byte[] content = LocalUtils.GetBinaryFileContent(rootPath + path);
+			sendResponse(content);
+			Logger.info(path + " located and sent");
+		} catch (IOException e) {
+			Logger.error(e.getMessage());
+			Logger.warning("file not found");
+			sendResponse(Response.NOT_FOUND);
+		}
+		closeConnection();
+	}
+
+	private void sendResponse(byte[] response) {
+		try {
+			outputStream.write(response);
+			outputStream.flush();
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
 		}
 	}
 
-	private void sendResponse(byte[] response) throws IOException {
-		outputStream.write(response);
-		outputStream.flush();
-		closeConnection();
-	}
-
-	private void sendResponse(String response) throws IOException {
+	private void sendResponse(String response) {
 		sendResponse(response.getBytes(StandardCharsets.UTF_8));
 	}
 

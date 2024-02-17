@@ -5,7 +5,6 @@ import Eye.Logger.Logger;
 import java.nio.charset.StandardCharsets;
 
 public abstract class Response {
-	// private static final String CSP = "Content-Security-Policy: default-src 'self' http://localhost:7777;\r\n";
 	public static final String OK = "HTTP/1.1 200 OK\r\n";
 	public static final String NOT_FOUND = "HTTP/1.1 404 Not Found\r\n";
 	public static final String SERVER_ERROR = "HTTP/1.1 500 Internal Server Error\r\n";

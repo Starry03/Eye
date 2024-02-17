@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class RequestHandler {
+class RequestHandler {
 	private String path;
 	private String method;
 	private String protocol;
@@ -32,6 +32,7 @@ public class RequestHandler {
 	}
 
 	private void parseRequest(Scanner scanner) {
+		if (!scanner.hasNextLine()) return;
 		String line = scanner.nextLine();
 		String[] requestLine = line.split(" ");
 		this.method = requestLine[0];
