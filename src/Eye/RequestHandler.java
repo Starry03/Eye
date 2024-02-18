@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Scanner;
 
-class RequestHandler {
+public class RequestHandler {
 	private String path;
 	private String method;
 	private String protocol;

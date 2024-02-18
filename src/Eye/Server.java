@@ -12,7 +12,6 @@ public class Server implements Runnable {
 	private final ServerSocket serverSocket;
 	private final RoutesHandler routesHandler;
 	private static Path rootPath = Path.of("./");
-
 	public Server(int port, RoutesHandler routesHandler) throws RuntimeException {
 		this.routesHandler = routesHandler;
 		try {

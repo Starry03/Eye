@@ -3,17 +3,25 @@ package Eye;
 import java.io.IOException;
 
 public abstract class Route {
-	private String path;
+	protected final String path;
+	protected RequestHandler requestHandler;
 
 	public Route(String path) {
 		this.path = path;
 	}
 
 	/**
+	 * This method is called by the endpoint thread to get the response
+	 */
+	public String getResponse() throws IOException {
+		return response();
+	}
+
+	/**
 	 * Override this method to return a response
 	 */
-	public String response() throws IOException {
-		return "";
+	protected String response() throws IOException {
+		return "Default eye response";
 	}
 
 	@Override
@@ -27,7 +35,15 @@ public abstract class Route {
 		return path;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public RequestHandler getRequestHandler() {
+		return requestHandler;
+	}
+
+	/**
+	 * The endpoint thread will call ResponseSender.sendRouteResponse, which will call this method to set the requestHandler
+	 * and make your custom route able to access the requestHandler
+	 */
+	public void setRequestHandler(RequestHandler requestHandler) {
+		this.requestHandler = requestHandler;
 	}
 }

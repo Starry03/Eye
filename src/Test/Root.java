@@ -12,7 +12,7 @@ public class Root extends Route {
 	}
 
 	@Override
-	public String response() throws IOException {
+	protected String response() throws IOException {
 		HTML response = new HTML(FileManager.GetFileContent("index.html"));
 		return response.getResponse();
 	}

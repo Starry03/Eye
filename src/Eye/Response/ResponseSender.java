@@ -2,6 +2,7 @@ package Eye.Response;
 
 import Eye.Local.FileManager;
 import Eye.Logger.Logger;
+import Eye.RequestHandler;
 import Eye.Route;
 import Eye.RoutesHandler;
 
@@ -10,17 +11,18 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public abstract class ResponseSender {
-	public static void send(String path, OutputStream outputStream, RoutesHandler routesHandler) {
+	public static void send(String path, OutputStream outputStream, RoutesHandler routesHandler, RequestHandler requestHandler) {
 		Route route = routesHandler.getRoutes().get(path);
 		if (route != null)
-			sendRouteResponse(route, outputStream);
+			sendRouteResponse(route, outputStream, requestHandler);
 		else
 			sendFileResponse(path, outputStream);
 	}
 
-	private static void sendRouteResponse(Route route, OutputStream outputStream) {
+	private static void sendRouteResponse(Route route, OutputStream outputStream, RequestHandler requestHandler) {
+		route.setRequestHandler(requestHandler);
 		try {
-			writeResponse(route.response(), outputStream);
+			writeResponse(route.getResponse(), outputStream);
 			Logger.info("Response sent: " + route.getPath());
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
