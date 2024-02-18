@@ -1,7 +1,5 @@
 package Eye.Route;
 
-import Eye.Route.Route;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -48,16 +46,19 @@ public class RoutesHandler {
 	}
 
 	/**
-	 * The removeRoute method is used to remove a route from the routes HashMap.
-	 * Similar to the addRoute method, it takes a Route object as a parameter, retrieves the path of the route,
-	 * and removes the route from the HashMap using the path as the key.
-	 *
+	 * Removes a route from the hashmap containing all routes.
 	 * @param route The route to be removed.
 	 */
 	public void removeRoute(Route route) {
 		routes.remove(route.getPath());
 	}
 
+	/**
+	 * The getRoutes method is used to retrieve the routes HashMap.
+	 * It returns the routes HashMap, which contains all the routes that have been added to the RoutesHandler.
+	 *
+	 * @return The routes HashMap.
+	 */
 	public HashMap<String, Route> getRoutes() {
 		return routes;
 	}
