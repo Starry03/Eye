@@ -6,7 +6,6 @@ import Eye.Route.RoutesHandler;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 class EndpointThread implements Runnable {
@@ -51,19 +50,6 @@ class EndpointThread implements Runnable {
 		ResponseSender.send(path, outputStream, routesHandler, requestHandler);
 		closeConnection();
 		scanner.close();
-	}
-
-	private void sendResponse(byte[] response) {
-		try {
-			outputStream.write(response);
-			outputStream.flush();
-		} catch (IOException e) {
-			Logger.error(e.getMessage());
-		}
-	}
-
-	private void sendResponse(String response) {
-		sendResponse(response.getBytes(StandardCharsets.UTF_8));
 	}
 
 	public synchronized boolean isExecuted() {
