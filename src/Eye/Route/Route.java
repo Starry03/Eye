@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public abstract class Route {
 	private final String path;
-	protected RequestHandler requestHandler;
+	private RequestHandler requestHandler;
 
 	public Route(String path) {
 		this.path = path;
