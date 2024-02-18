@@ -33,8 +33,8 @@ public abstract class Response {
 	}
 
 	public String getResponse() {
-		if (content == null) {
-			Logger.error("response content is null");
+		if (content == null || content.isEmpty()) {
+			Logger.error("Response content is null or empty");
 			return NOT_FOUND;
 		}
 
