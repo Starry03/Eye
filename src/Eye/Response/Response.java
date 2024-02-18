@@ -1,6 +1,6 @@
 package Eye.Response;
 
-import Eye.Logger.Logger;
+import Logger.Logger;
 
 import java.nio.charset.StandardCharsets;
 

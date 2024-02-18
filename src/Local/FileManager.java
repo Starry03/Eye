@@ -1,4 +1,4 @@
-package Eye.Local;
+package Local;
 
 import Eye.Server;
 

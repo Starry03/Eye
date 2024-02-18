@@ -1,4 +1,4 @@
-package Eye.Logger;
+package Logger;
 
 public abstract class Logger {
 	private static boolean isActive = true;

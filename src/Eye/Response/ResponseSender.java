@@ -1,7 +1,7 @@
 package Eye.Response;
 
-import Eye.Local.FileManager;
-import Eye.Logger.Logger;
+import Local.FileManager;
+import Logger.Logger;
 import Eye.RequestHandler;
 import Eye.Route.Route;
 import Eye.Route.RoutesHandler;

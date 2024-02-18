@@ -1,4 +1,4 @@
-package Eye.Logger;
+package Logger;
 
 public abstract class Color {
 	public static String WHITE = "\u001B[38m";

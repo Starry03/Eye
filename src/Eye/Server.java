@@ -1,6 +1,6 @@
 package Eye;
 
-import Eye.Logger.Logger;
+import Logger.Logger;
 import Eye.Route.RoutesHandler;
 
 import java.io.IOException;

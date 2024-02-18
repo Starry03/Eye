@@ -1,6 +1,6 @@
 package Eye;
 
-import Eye.Logger.Logger;
+import Logger.Logger;
 
 import java.util.Scanner;
 
