@@ -1,8 +1,8 @@
 package Test;
 
 import Eye.Local.FileManager;
-import Eye.ProtectedRoute;
 import Eye.Response.JSON;
+import Eye.Route.ProtectedRoute;
 
 import java.io.IOException;
 

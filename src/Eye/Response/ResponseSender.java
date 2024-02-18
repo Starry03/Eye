@@ -3,8 +3,8 @@ package Eye.Response;
 import Eye.Local.FileManager;
 import Eye.Logger.Logger;
 import Eye.RequestHandler;
-import Eye.Route;
-import Eye.RoutesHandler;
+import Eye.Route.Route;
+import Eye.Route.RoutesHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;

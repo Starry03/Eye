@@ -1,6 +1,6 @@
 package Test;
 
-import Eye.RoutesHandler;
+import Eye.Route.RoutesHandler;
 import Eye.Server;
 
 public class Main {

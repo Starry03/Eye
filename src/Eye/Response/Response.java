@@ -19,11 +19,11 @@ public abstract class Response {
 		this.contentType = contentType;
 	}
 
-	protected int getContentLength() {
+	protected final int getContentLength() {
 		return content.getBytes(StandardCharsets.UTF_8).length;
 	}
 
-	protected String getEmptyResponse() {
+	protected final String getEmptyResponse() {
 		return OK +
 				contentType +
 				"Content-Length:" +

@@ -11,7 +11,7 @@ All you need is:
 ```java
 package Test;
 
-import Eye.RoutesHandler;
+import Eye.Route.RoutesHandler;
 import Eye.Server;
 
 public class Main {
@@ -37,7 +37,7 @@ package Test;
 
 import Eye.Response.HTML;
 import Eye.Local.FileManager;
-import Eye.Route;
+import Eye.Route.Route;
 
 import java.io.IOException;
 

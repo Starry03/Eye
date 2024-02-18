@@ -1,9 +1,11 @@
-package Eye;
+package Eye.Route;
+
+import Eye.RequestHandler;
 
 import java.io.IOException;
 
 public abstract class Route {
-	protected final String path;
+	private final String path;
 	protected RequestHandler requestHandler;
 
 	public Route(String path) {
