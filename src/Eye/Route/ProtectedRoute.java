@@ -21,9 +21,10 @@ public class ProtectedRoute extends Route {
 	}
 
 	private String protectedResponse() throws IOException {
-		if (isProtected && !isAuthorized())
-			return Response.UNAUTHORIZED;
-		return response();
+		if (!isProtected) return response();
+		else if (isAuthorized())
+			return response();
+		return Response.UNAUTHORIZED;
 	}
 
 	/**

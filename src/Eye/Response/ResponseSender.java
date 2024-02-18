@@ -22,8 +22,11 @@ public abstract class ResponseSender {
 	private static void sendRouteResponse(Route route, OutputStream outputStream, RequestHandler requestHandler) {
 		route.setRequestHandler(requestHandler);
 		try {
-			writeResponse(route.getResponse(), outputStream);
-			Logger.info("Response sent: " + route.getPath());
+			String response = route.getResponse();
+			writeResponse(response, outputStream);
+			if (response.startsWith(Response.OK))
+				Logger.info("Response sent: " + route.getPath());
+			else Logger.warning("Path: " + route.getPath() + "\n" + "Response: unauthorized or server error");
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
 		}
