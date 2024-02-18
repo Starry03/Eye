@@ -5,7 +5,7 @@ import Eye.Response.Response;
 import java.io.IOException;
 
 public class ProtectedRoute extends Route {
-	protected boolean isProtected = true;
+	private boolean isProtected = true;
 
 	/**
 	 * Class made to provide secure access to the route
@@ -31,5 +31,9 @@ public class ProtectedRoute extends Route {
 	 */
 	protected boolean isAuthorized() {
 		return false;
+	}
+
+	protected void setProtected(boolean isProtected) {
+		this.isProtected = isProtected;
 	}
 }
