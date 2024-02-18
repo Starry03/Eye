@@ -29,6 +29,7 @@ public abstract class ResponseSender {
 			else Logger.warning("Path: " + route.getPath() + "\n" + "Response: unauthorized or server error");
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
+			writeResponse(Response.SERVER_ERROR, outputStream);
 		}
 	}
 
