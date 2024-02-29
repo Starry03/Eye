@@ -12,17 +12,24 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class ResponseSender {
 	public static void send(String path, OutputStream outputStream, RoutesHandler routesHandler, RequestHandler requestHandler) {
+		if (!requestHandler.authorized()) {
+			Logger.warning("Unauthorized request");
+			writeResponse(Response.UNAUTHORIZED, outputStream);
+			return;
+		}
+
 		Route route = routesHandler.getRoutes().get(path);
 		if (route != null)
 			sendRouteResponse(route, outputStream, requestHandler);
 		else
-			sendFileResponse(path, outputStream);
+			sendFileResponse(outputStream, requestHandler);
 	}
 
 	private static void sendRouteResponse(Route route, OutputStream outputStream, RequestHandler requestHandler) {
 		route.setRequestHandler(requestHandler);
 		try {
 			String response = route.getResponse();
+			response = ResponseSender.insertCorsHeaders(response, requestHandler);
 			writeResponse(response, outputStream);
 			if (response.startsWith(Response.OK))
 				Logger.info("Response sent: " + route.getPath());
@@ -33,13 +40,13 @@ public abstract class ResponseSender {
 		}
 	}
 
-	private static void sendFileResponse(String path, OutputStream outputStream) {
+	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler) {
 		Logger.warning("Route not found");
 		try {
-			byte[] content = FileManager.GetBinaryFileContent(path);
+			byte[] content = FileManager.GetBinaryFileContent(requestHandler.getPath());
 			FILE f = new FILE(content, "file/unknown");
-			writeResponse(f.getByteResponse(), outputStream);
-			Logger.info("Response sent: " + path);
+			writeResponse(f.getByteResponse(requestHandler), outputStream);
+			Logger.info("Response sent: " + requestHandler.getPath());
 		} catch (IOException e) {
 			writeResponse(Response.NOT_FOUND, outputStream);
 			Logger.error(e.getMessage());
@@ -58,5 +65,18 @@ public abstract class ResponseSender {
 
 	private static void writeResponse(String response, OutputStream outputStream) {
 		writeResponse(response.getBytes(StandardCharsets.UTF_8), outputStream);
+	}
+
+	private static String insertCorsHeaders(String response, RequestHandler requestHandler) {
+		// find first empty line
+		int emptyLineIndex = response.indexOf("\r\n\r\n");
+		if (emptyLineIndex == -1) {
+			Logger.error("Response has no empty line");
+			return response;
+		}
+		String sub = response.substring(0, emptyLineIndex);
+		return sub + "\r\n" +
+				requestHandler.getCorsHeaders() +
+				response.substring(emptyLineIndex);
 	}
 }

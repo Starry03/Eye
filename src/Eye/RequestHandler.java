@@ -15,13 +15,31 @@ public class RequestHandler {
 	private String acceptEncoding;
 	private String connection;
 	private String cookie;
+	private String fetchMode;
+	private String fetchSite;
+	private String fetchUser;
 	private final LocalTime time;
 	private final HashMap<String, String> queryParams;
+	private final boolean authorized;
+	private final Cors cors;
 
-	public RequestHandler(Scanner scanner) {
+	public RequestHandler(Scanner scanner, Cors cors) {
 		this.time = LocalTime.now();
 		this.queryParams = new HashMap<>();
 		this.parseRequest(scanner);
+		this.cors = cors;
+		this.authorized = cors.isAllowed(
+				fetchMode,
+				fetchSite,
+				fetchUser
+		);
+	}
+
+	public String getCorsHeaders() {
+		return cors.getOriginHeader(fetchSite) +
+				cors.getAllowedMethodsHeader() +
+				cors.getAllowedHeadersHeader() +
+				"Access-Control-Allow-Credentials: true\r\n";
 	}
 
 	private void buildQueryParams(String[] params) {
@@ -68,6 +86,9 @@ public class RequestHandler {
 					break;
 				case "Cookie":
 					this.cookie = header[1];
+					break;
+				case "Sec-Fetch-Site":
+					this.fetchSite = header[1];
 					break;
 			}
 		}
@@ -121,20 +142,43 @@ public class RequestHandler {
 		return queryParams;
 	}
 
+	public String getFetchSite() {
+		return fetchSite;
+	}
+
+	public String getFetchMode() {
+		return fetchMode;
+	}
+
+	public String getFetchUser() {
+		return fetchUser;
+	}
+
+	public boolean isAuthorized() {
+		return authorized;
+	}
+
+	public boolean authorized() {
+		return authorized;
+	}
+
 	@Override
 	public String toString() {
-		return "RequestHandler{" +
-				"path='" + path + '\'' +
-				", method='" + method + '\'' +
-				", protocol='" + protocol + '\'' +
-				", host='" + host + '\'' +
-				", userAgent='" + userAgent + '\'' +
-				", accept='" + accept + '\'' +
-				", acceptLanguage='" + acceptLanguage + '\'' +
-				", acceptEncoding='" + acceptEncoding + '\'' +
-				", connection='" + connection + '\'' +
-				", cookie='" + cookie + '\'' +
-				", time=" + time +
-				'}';
+		StringBuilder sb = new StringBuilder();
+		sb.append("RequestHandler Details:\n");
+		sb.append("Path: ").append(path).append("\n");
+		sb.append("Method: ").append(method).append("\n");
+		sb.append("Protocol: ").append(protocol).append("\n");
+		sb.append("Host: ").append(host).append("\n");
+		sb.append("User-Agent: ").append(userAgent).append("\n");
+		sb.append("Accept: ").append(accept).append("\n");
+		sb.append("Accept-Language: ").append(acceptLanguage).append("\n");
+		sb.append("Accept-Encoding: ").append(acceptEncoding).append("\n");
+		sb.append("Connection: ").append(connection).append("\n");
+		sb.append("Cookie: ").append(cookie).append("\n");
+		sb.append("Origin: ").append(fetchSite).append("\n");
+		sb.append("Time: ").append(time).append("\n");
+		sb.append("Query Parameters: ").append(queryParams).append("\n");
+		return sb.toString();
 	}
 }

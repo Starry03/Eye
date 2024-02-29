@@ -6,7 +6,6 @@ import Eye.Response.JSON;
 import Eye.Route.ProtectedRoute;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class Datas extends ProtectedRoute {
 	public Datas() {

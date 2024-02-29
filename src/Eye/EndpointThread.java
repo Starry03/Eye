@@ -2,7 +2,6 @@ package Eye;
 
 import Logger.Logger;
 import Eye.Response.ResponseSender;
-import Eye.Route.RoutesHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,16 +9,16 @@ import java.util.Scanner;
 
 class EndpointThread implements Runnable {
 	private boolean executed = false;
-	private final RoutesHandler routesHandler;
+	private final Server server;
 	private final Socket socket;
 	private final OutputStream outputStream;
 	private final InputStream inputStream;
 
-	public EndpointThread(Socket socket, RoutesHandler routesHandler) throws IOException {
+	public EndpointThread(Server server, Socket socket) throws IOException {
+		this.server = server;
 		this.socket = socket;
 		this.outputStream = socket.getOutputStream();
 		this.inputStream = socket.getInputStream();
-		this.routesHandler = routesHandler;
 	}
 
 	private void closeConnection() {
@@ -31,23 +30,16 @@ class EndpointThread implements Runnable {
 		}
 	}
 
-	public String getActivity(RequestHandler requestHandler, String response) {
-		return "Request from: " + requestHandler.getHost() + "\n" +
-				"Time: " + requestHandler.getTime() + "\n" +
-				"Path: " + requestHandler.getPath() + "\n" +
-				"Parameters: " + requestHandler.getQueryParams() + "\n" +
-				"Response: " + response + "\n";
-	}
-
 	@Override
 	public synchronized void run() {
 		if (executed) return;
 		executed = true;
 		Logger.info("Start: connection opened");
 		Scanner scanner = new Scanner(inputStream);
-		RequestHandler requestHandler = new RequestHandler(scanner);
+		RequestHandler requestHandler = new RequestHandler(scanner, server.getCors());
+		// System.out.println(requestHandler);
 		String path = requestHandler.getPath();
-		ResponseSender.send(path, outputStream, routesHandler, requestHandler);
+		ResponseSender.send(path, outputStream, server.getRoutesHandler(), requestHandler);
 		closeConnection();
 		scanner.close();
 	}

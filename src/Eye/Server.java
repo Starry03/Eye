@@ -13,6 +13,7 @@ public class Server implements Runnable {
 	private final ServerSocket serverSocket;
 	private final RoutesHandler routesHandler;
 	private static Path rootPath = Path.of("./");
+	private Cors cors = new Cors();
 	public Server(int port, RoutesHandler routesHandler) throws RuntimeException {
 		this.routesHandler = routesHandler;
 		try {
@@ -33,8 +34,8 @@ public class Server implements Runnable {
 		while (running) {
 			try {
 				EndpointThread endpointThread = new EndpointThread(
-						serverSocket.accept(),
-						routesHandler
+						this,
+						serverSocket.accept()
 				);
 				if (!running) break;
 				Thread thread = new Thread(endpointThread);
@@ -72,5 +73,13 @@ public class Server implements Runnable {
 
 	public static void setRootPath(String path) {
 		Server.rootPath = Path.of(path);
+	}
+
+	public Cors getCors() {
+		return cors;
+	}
+
+	public void setCors(Cors cors) {
+		this.cors = cors;
 	}
 }

@@ -1,5 +1,7 @@
 package Eye.Response;
 
+import Eye.RequestHandler;
+
 public final class FILE extends Response {
 	private final byte[] bytes;
 
@@ -13,14 +15,13 @@ public final class FILE extends Response {
 		return "";
 	}
 
-	public byte[] getByteResponse() {
-		int i = 0;
-		int totalLength = getEmptyResponse().length() + bytes.length;
-		byte[] response = new byte[totalLength];
-		for (byte b : getEmptyResponse().getBytes())
-			response[i++] = b;
-		for (byte b : bytes)
-			response[i++] = b;
-		return response;
+	public byte[] getByteResponse(RequestHandler requestHandler) {
+		String emptyResponse = getEmptyResponse();
+		String corsHeaders = requestHandler.getCorsHeaders();
+		int emptyLineIndex = emptyResponse.indexOf("\r\n\r\n");
+		String sub = emptyResponse.substring(0, emptyLineIndex);
+		String res = sub + "\r\n" + corsHeaders + emptyResponse.substring(emptyLineIndex);
+		String response = res + new String(bytes);
+		return response.getBytes();
 	}
 }
