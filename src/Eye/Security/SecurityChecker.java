@@ -1,4 +1,4 @@
-package Eye.Response;
+package Eye.Security;
 
 import Eye.RequestHandler;
 import Eye.Server;
@@ -7,7 +7,6 @@ import Logger.Logger;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.regex.Pattern;
 
 public abstract class SecurityChecker {
 	public static boolean isSecure(RequestHandler requestHandler, Path relativePath) {

@@ -4,14 +4,15 @@ public class Cors {
 	private final String[] allowedOrigins;
 	private final String[] allowedMethods;
 	private final String[] allowedHeaders;
+	private static final String ALL_WILDCARD = "*";
 
 	/**
 	 * unsafe CORS constructor
 	 */
 	public Cors() {
-		this.allowedOrigins = new String[]{"*"};
+		this.allowedOrigins = new String[]{ALL_WILDCARD};
 		this.allowedMethods = new String[]{"GET", "POST", "PUT", "DELETE", "OPTIONS"};
-		this.allowedHeaders = new String[]{"*"};
+		this.allowedHeaders = new String[]{ALL_WILDCARD};
 	}
 
 	public Cors(String[] allowedOrigins, String[] allowedMethods, String[] allowedHeaders) {
@@ -32,8 +33,20 @@ public class Cors {
 		return allowedHeaders;
 	}
 
+	private boolean isOriginAllowed(String origin) {
+		return true;
+	}
+
+	private boolean isMethodAllowed(String method) {
+		return true;
+	}
+
+	private boolean isFetchModeAllowed(String fetchMode) {
+		return true;
+	}
+
 	public boolean isAllowed(String fetchMode, String fetchSite, String fetchUser) {
-		// TODO: implement CORS policy
+
 		return true;
 	}
 
@@ -41,7 +54,7 @@ public class Cors {
 		StringBuilder res = new StringBuilder("Access-Control-Allow-Origin: ");
 		if (fetchSite == null) return res.append("*\r\n").toString();
 		if (fetchSite.equals("same-origin") || fetchSite.equals("none"))
-				return res.append("*\r\n").toString();
+			return res.append("*\r\n").toString();
 		for (String allowedOrigin : allowedOrigins)
 			if (allowedOrigin.equals(fetchSite))
 				return res.append(fetchSite).append("\r\n").toString();
