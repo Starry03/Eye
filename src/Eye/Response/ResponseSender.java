@@ -54,6 +54,7 @@ public abstract class ResponseSender {
 				Logger.warning("Path: " + route.getPath() + "\n" + "Response: unauthorized or server error");
 				return;
 			}
+			Logger.info("Sending response from route: " + route.getPath());
 			String response = route.getResponse();
 			response = insertCorsHeaders(response, requestHandler);
 			writeResponse(response, outputStream);
@@ -132,7 +133,6 @@ public abstract class ResponseSender {
 	 * @return                 response with CORS headers
 	*/
 	private static String insertCorsHeaders(String response, RequestHandler requestHandler) {
-		// find first empty line
 		int emptyLineIndex = response.indexOf("\r\n\r\n");
 		if (emptyLineIndex == -1) {
 			Logger.error("Response has no empty line");

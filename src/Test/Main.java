@@ -13,7 +13,12 @@ public class Main {
 		routesHandler.addRoute(new Datas());
 		Server server = new Server(PORT, routesHandler);
 		server.setCors(new Cors(
-				new String[]{"*"},
+				new String[]{
+						"http://localhost:3000",
+						"https://localhost:3000",
+						"http://127.0.0.1:3000",
+						"https://127.0.0.1:3000"
+				},
 				new String[]{"GET", "POST"},
 				new String[]{"*"}
 		));

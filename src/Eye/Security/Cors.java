@@ -1,5 +1,8 @@
 package Eye.Security;
 
+import Eye.RequestHandler;
+import Logger.Logger;
+
 public class Cors {
 	private final String[] allowedOrigins;
 	private final String[] allowedMethods;
@@ -33,31 +36,57 @@ public class Cors {
 		return allowedHeaders;
 	}
 
+	private boolean arrContains(String[] array, String value) {
+		for (String s : array)
+			if (s.equals(value))
+				return true;
+		return false;
+	}
+
 	private boolean isOriginAllowed(String origin) {
-		return true;
+		if (this.allowedOrigins[0].equals(ALL_WILDCARD)) return true;
+		if (origin == null) return true;
+		return arrContains(allowedOrigins, origin);
 	}
 
 	private boolean isMethodAllowed(String method) {
+		if (this.allowedMethods[0].equals(ALL_WILDCARD)) return true;
+		return arrContains(allowedMethods, method);
+	}
+
+	private boolean isHeadersAllowed(RequestHandler requestHandler) {
+		if (this.allowedHeaders[0].equals(ALL_WILDCARD)) return true;
+		String[] headers = requestHandler.getHeadersName();
+		for (String header : headers)
+			if (!arrContains(allowedHeaders, header))
+				return false;
 		return true;
 	}
 
-	private boolean isFetchModeAllowed(String fetchMode) {
-		return true;
+	public boolean isAllowed(RequestHandler requestHandler) {
+		boolean isOriginAllowed = isOriginAllowed(requestHandler.getReferer());
+		boolean isMethodAllowed = isMethodAllowed(requestHandler.getMethod());
+		boolean isHeadersAllowed = isHeadersAllowed(requestHandler);
+		boolean allowed = isOriginAllowed && isMethodAllowed && isHeadersAllowed;
+		if (!allowed) {
+			Logger.error(
+					"Cors error\n" +
+							"originAllowed: " + isOriginAllowed + "\n" +
+							"methodAllowed: " + isMethodAllowed + "\n" +
+							"headersAllowed: " + isHeadersAllowed
+			);
+		}
+		return allowed;
 	}
 
-	public boolean isAllowed(String fetchMode, String fetchSite, String fetchUser) {
-
-		return true;
-	}
-
-	public String getOriginHeader(String fetchSite) {
+	public String getOriginHeader(String origin) {
 		StringBuilder res = new StringBuilder("Access-Control-Allow-Origin: ");
-		if (fetchSite == null) return res.append("*\r\n").toString();
-		if (fetchSite.equals("same-origin") || fetchSite.equals("none"))
+		if (origin == null) return res.append("*\r\n").toString();
+		if (origin.equals("same-origin") || origin.equals("none"))
 			return res.append("*\r\n").toString();
 		for (String allowedOrigin : allowedOrigins)
-			if (allowedOrigin.equals(fetchSite))
-				return res.append(fetchSite).append("\r\n").toString();
+			if (allowedOrigin.equals(origin))
+				return res.append(origin).append("\r\n").toString();
 		return res.append("none\r\n").toString();
 	}
 
