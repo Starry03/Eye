@@ -8,8 +8,8 @@ import java.util.Scanner;
 
 public class RequestHandler {
 	HashMap<String, String> headers = new HashMap<>();
-	private final LocalTime time;
 	private final HashMap<String, String> queryParams;
+	private final LocalTime time;
 	private final Cors cors;
 	private final boolean authorized;
 
@@ -18,7 +18,7 @@ public class RequestHandler {
 		this.queryParams = new HashMap<>();
 		this.parseRequest(scanner);
 		this.cors = server.getCors();
-		this.authorized = cors.isAllowed(this);
+		this.authorized = cors.corsAllows(this);
 	}
 
 	public String getCorsHeaders() {
