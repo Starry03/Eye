@@ -32,7 +32,12 @@ public class RequestHandler {
 				fetchMode,
 				fetchSite,
 				fetchUser
-		);
+		) && this.pathIsSecure();
+	}
+
+	private boolean pathIsSecure() {
+		// TODO: Implement pathIsSecure
+		return true;
 	}
 
 	public String getCorsHeaders() {

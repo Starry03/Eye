@@ -1,0 +1,7 @@
+GET http://127.0.0.1:3000/./../../LICENSE
+Accept: text/plain
+
+###
+// generate a request that could get a file from somewhere
+
+

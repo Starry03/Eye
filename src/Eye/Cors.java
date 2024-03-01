@@ -37,13 +37,14 @@ public class Cors {
 		return true;
 	}
 
-	public String getOriginHeader(String origin) {
+	public String getOriginHeader(String fetchSite) {
 		StringBuilder res = new StringBuilder("Access-Control-Allow-Origin: ");
-		if (origin.equals("same-origin") || origin.equals("none"))
+		if (fetchSite == null) return res.append("*\r\n").toString();
+		if (fetchSite.equals("same-origin") || fetchSite.equals("none"))
 				return res.append("*\r\n").toString();
 		for (String allowedOrigin : allowedOrigins)
-			if (allowedOrigin.equals(origin))
-				return res.append(origin).append("\r\n").toString();
+			if (allowedOrigin.equals(fetchSite))
+				return res.append(fetchSite).append("\r\n").toString();
 		return res.append("none\r\n").toString();
 	}
 
