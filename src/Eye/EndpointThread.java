@@ -36,8 +36,7 @@ class EndpointThread implements Runnable {
 		executed = true;
 		Logger.info("Start: connection opened");
 		Scanner scanner = new Scanner(inputStream);
-		RequestHandler requestHandler = new RequestHandler(scanner, server.getCors());
-		// System.out.println(requestHandler);
+		RequestHandler requestHandler = new RequestHandler(scanner, server);
 		String path = requestHandler.getPath();
 		ResponseSender.send(path, outputStream, server.getRoutesHandler(), requestHandler);
 		closeConnection();

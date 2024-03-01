@@ -1,5 +1,6 @@
 package Eye;
 
+import Eye.Security.Cors;
 import Logger.Logger;
 import Eye.Route.RoutesHandler;
 

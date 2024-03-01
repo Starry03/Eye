@@ -1,4 +1,4 @@
-package Eye;
+package Eye.Security;
 
 public class Cors {
 	private final String[] allowedOrigins;

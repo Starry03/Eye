@@ -1,5 +1,7 @@
 package Eye;
 
+import Eye.Security.Cors;
+
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -20,24 +22,19 @@ public class RequestHandler {
 	private String fetchUser;
 	private final LocalTime time;
 	private final HashMap<String, String> queryParams;
-	private final boolean authorized;
 	private final Cors cors;
+	private final boolean authorized;
 
-	public RequestHandler(Scanner scanner, Cors cors) {
+	public RequestHandler(Scanner scanner, Server server) {
 		this.time = LocalTime.now();
 		this.queryParams = new HashMap<>();
 		this.parseRequest(scanner);
-		this.cors = cors;
+		this.cors = server.getCors();
 		this.authorized = cors.isAllowed(
 				fetchMode,
 				fetchSite,
 				fetchUser
-		) && this.pathIsSecure();
-	}
-
-	private boolean pathIsSecure() {
-		// TODO: Implement pathIsSecure
-		return true;
+		);
 	}
 
 	public String getCorsHeaders() {

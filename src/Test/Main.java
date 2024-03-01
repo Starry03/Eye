@@ -1,6 +1,6 @@
 package Test;
 
-import Eye.Cors;
+import Eye.Security.Cors;
 import Eye.Route.RoutesHandler;
 import Eye.Server;
 

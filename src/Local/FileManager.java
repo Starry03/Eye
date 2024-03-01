@@ -13,7 +13,7 @@ public class FileManager {
 		return GetBinaryFileContent(Path.of(path));
 	}
 	public static byte[] GetBinaryFileContent(Path path) throws IOException {
-		Path filePath = Paths.get(Server.getRootPath().toString(), path.toString());
+		Path filePath = Paths.get(path.toString());
 		return Files.readAllBytes(filePath);
 	}
 	public static String GetFileContent(String path) throws IOException {

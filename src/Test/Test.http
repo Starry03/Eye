@@ -1,7 +1,26 @@
+// sercurity tests
+
 GET http://127.0.0.1:3000/./../../LICENSE
 Accept: text/plain
+############################################
 
-###
-// generate a request that could get a file from somewhere
+GET http://localhost:3000/../../README.md
+Accept: text/plain
 
+############################################
 
+GET http://localhost:3000/../../Test.iml
+Accept: text/plain
+
+############################################
+
+GET http://localhost:3000/Datas.java
+Accept: text/plain
+
+############################################
+
+# go to windows root
+GET http://localhost:3000/C:/Windows/win.ini
+Accept: text/plain
+
+############################################
