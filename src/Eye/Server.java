@@ -1,5 +1,6 @@
 package Eye;
 
+import Eye.Route.Route;
 import Eye.Security.Cors;
 import Logger.Logger;
 import Eye.Route.RoutesHandler;
@@ -9,16 +10,24 @@ import java.net.ServerSocket;
 import java.nio.file.Path;
 
 public class Server implements Runnable {
+	public static int DEFAULT_PORT = 3000;
 	private boolean executed = false;
 	private boolean running = true;
 	private final ServerSocket serverSocket;
-	private final RoutesHandler routesHandler;
+	private final RoutesHandler routesHandler = new RoutesHandler();
 	private static Path rootPath = Path.of("./");
 	private Cors cors = new Cors();
-	public Server(int port, RoutesHandler routesHandler) throws RuntimeException {
-		this.routesHandler = routesHandler;
+	public Server(int port) throws RuntimeException {
 		try {
 			this.serverSocket = new ServerSocket(port);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public Server() throws RuntimeException {
+		try {
+			this.serverSocket = new ServerSocket(DEFAULT_PORT);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -74,6 +83,14 @@ public class Server implements Runnable {
 
 	public static void setRootPath(String path) {
 		Server.rootPath = Path.of(path);
+	}
+
+	public void addRoute(Route route) {
+		routesHandler.addRoute(route);
+	}
+
+	public void addRoutes(Route[] route) {
+		routesHandler.addRoutes(route);
 	}
 
 	public Cors getCors() {

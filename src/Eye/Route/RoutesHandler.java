@@ -28,21 +28,21 @@ public class RoutesHandler {
 	 * It takes an array of Route objects as a parameter, and for each route in the array,
 	 * it calls the addRoute method to add the route to the HashMap.
 	 *
-	 * @param routes The routes to be added.
+	 * @param routesArr The routes to be added.
 	 */
-	public void addRoutes(Route[] routes) {
-		for (Route route : routes)
-			addRoute(route);
+	public void addRoutes(Route[] routesArr) {
+		for (Route route : routesArr)
+			routes.put(route.getPath(), route);
 	}
 
-	public void addRoutes(ArrayList<Route> routes) {
-		for (Route route : routes)
-			addRoute(route);
+	public void addRoutes(ArrayList<Route> routesList) {
+		for (Route route : routesList)
+			routes.put(route.getPath(), route);
 	}
 
-	public void addRoutes(LinkedList<Route> routes) {
-		for (Route route : routes)
-			addRoute(route);
+	public void addRoutes(LinkedList<Route> routesLinkedList) {
+		for (Route route : routesLinkedList)
+			routes.put(route.getPath(), route);
 	}
 
 	/**
