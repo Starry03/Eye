@@ -24,7 +24,6 @@ class EndpointThread implements Runnable {
 	private void closeConnection() {
 		try {
 			socket.close();
-			Logger.info("End: connection closed\n");
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
 		}
@@ -34,7 +33,6 @@ class EndpointThread implements Runnable {
 	public synchronized void run() {
 		if (executed) return;
 		executed = true;
-		Logger.info("Start: connection opened");
 		Scanner scanner = new Scanner(inputStream);
 		RequestHandler requestHandler = new RequestHandler(scanner, server);
 		String path = requestHandler.getPath();

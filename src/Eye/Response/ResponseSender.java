@@ -54,11 +54,9 @@ public abstract class ResponseSender {
 				Logger.warning("Path: " + route.getPath() + "\n" + "Response: Server error");
 				return;
 			}
-			Logger.info("Sending response from route: " + route.getPath());
 			Response response = route.getResponse();
 			response.requestHandler = requestHandler;
 			writeResponse(response.getResponse(), outputStream);
-			Logger.info("Response sent: " + route.getPath());
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
 			writeResponse(Response.SERVER_ERROR, outputStream);
@@ -92,7 +90,6 @@ public abstract class ResponseSender {
 			file.requestHandler = requestHandler;
 			byte[] response = file.getByteResponse();
 			writeResponse(response, outputStream);
-			Logger.info("Response sent: " + requestHandler.getPath());
 		} catch (IOException e) {
 			writeResponse(Response.NOT_FOUND, outputStream);
 			Logger.error(e.getMessage());
@@ -123,24 +120,5 @@ public abstract class ResponseSender {
 	*/
 	private static void writeResponse(String response, OutputStream outputStream) {
 		writeResponse(response.getBytes(StandardCharsets.UTF_8), outputStream);
-	}
-
-	/**
-	 * Inserts CORS headers into response
-	 *
-	 * @param response         response to be modified
-	 * @param requestHandler   request handler
-	 * @return                 response with CORS headers
-	*/
-	private static String insertCorsHeaders(String response, RequestHandler requestHandler) {
-		int emptyLineIndex = response.indexOf("\r\n\r\n");
-		if (emptyLineIndex == -1) {
-			Logger.error("Response has no empty line");
-			return response;
-		}
-		String sub = response.substring(0, emptyLineIndex);
-		return sub + "\r\n" +
-				requestHandler.getCorsHeaders() +
-				response.substring(emptyLineIndex + 2);
 	}
 }

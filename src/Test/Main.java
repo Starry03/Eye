@@ -12,8 +12,7 @@ public class Main {
 
 		Server server = new Server(PORT);
 		Route[] routes = new Route[]{
-				new Root(),
-				new Datas()
+				new Root()
 		};
 		server.addRoutes(routes);
 		server.setCors(new Cors(
