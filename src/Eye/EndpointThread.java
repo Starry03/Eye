@@ -21,6 +21,9 @@ class EndpointThread implements Runnable {
 		this.inputStream = socket.getInputStream();
 	}
 
+	/**
+	 * Closes the socket.
+	 */
 	private void closeConnection() {
 		try {
 			socket.close();
@@ -29,6 +32,10 @@ class EndpointThread implements Runnable {
 		}
 	}
 
+	/**
+	 * This method is called when the thread is started.
+	 * It reads the input stream and sends the response to the output stream.
+	 */
 	@Override
 	public synchronized void run() {
 		if (executed) return;
