@@ -50,8 +50,8 @@ public abstract class ResponseSender {
 		route.setRequestHandler(requestHandler);
 		try {
 			if (!SecurityChecker.isSecure(requestHandler, null)) {
-				writeResponse(Response.UNAUTHORIZED, outputStream);
-				Logger.warning("Path: " + route.getPath() + "\n" + "Response: unauthorized or server error");
+				writeResponse(Response.SERVER_ERROR, outputStream);
+				Logger.warning("Path: " + route.getPath() + "\n" + "Response: Server error");
 				return;
 			}
 			Logger.info("Sending response from route: " + route.getPath());
@@ -72,10 +72,9 @@ public abstract class ResponseSender {
 	 * @param requestHandler  request handler
 	*/
 	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler) {
-		Logger.warning("Route not found");
-		Path relativePath;
+		Path absPath;
 		try {
-			relativePath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
+			absPath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
 		}
 		catch (Exception e) {
 			writeResponse(Response.BAD_REQUEST, outputStream);
@@ -83,12 +82,12 @@ public abstract class ResponseSender {
 			return;
 		}
 		try {
-			if (!SecurityChecker.isSecure(requestHandler, relativePath)) {
+			if (!SecurityChecker.isSecure(requestHandler, absPath)) {
 				writeResponse(Response.FORBIDDEN, outputStream);
 				Logger.warning("Path: " + requestHandler.getPath() + "\n" + "Response: forbidden");
 				return;
 			}
-			byte[] content = FileManager.GetBinaryFileContent(relativePath);
+			byte[] content = FileManager.GetBinaryFileContent(absPath);
 			FILE file = new FILE(content, "file/unknown");
 			byte[] response = file.getByteResponse(requestHandler);
 			writeResponse(response, outputStream);
@@ -141,6 +140,6 @@ public abstract class ResponseSender {
 		String sub = response.substring(0, emptyLineIndex);
 		return sub + "\r\n" +
 				requestHandler.getCorsHeaders() +
-				response.substring(emptyLineIndex);
+				response.substring(emptyLineIndex + 2);
 	}
 }

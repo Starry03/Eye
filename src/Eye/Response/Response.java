@@ -31,7 +31,7 @@ public abstract class Response {
 	protected final String getEmptyResponse() {
 		return OK +
 				contentType +
-				"Content-Length:" + getContentLength() + "\r\n" +
+				getContentLengthHeader() +
 				"\r\n";
 	}
 
@@ -50,6 +50,10 @@ public abstract class Response {
 
 	public String getContentType() {
 		return contentType;
+	}
+
+	protected String getContentLengthHeader() {
+		return "Content-Length: " + getContentLength() + "\r\n";
 	}
 
 	@Override

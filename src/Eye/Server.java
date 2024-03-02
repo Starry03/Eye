@@ -40,7 +40,7 @@ public class Server implements Runnable {
 		ServerSafeStopper serverSafeStopper = new ServerSafeStopper(this);
 		Thread serverSafeStopperThread = new Thread(serverSafeStopper);
 		serverSafeStopperThread.start();
-		Logger.info("Server started\n");
+		Logger.info("Server started\n" + "Port: " + getPort() + "\n");
 		while (running) {
 			try {
 				EndpointThread endpointThread = new EndpointThread(

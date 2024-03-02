@@ -8,6 +8,7 @@ public final class FILE extends Response {
 	public FILE(byte[] content, String contentType) {
 		super("content is bytes", contentType);
 		this.bytes = content;
+		contentLength = bytes.length;
 	}
 
 	@Override
@@ -16,12 +17,17 @@ public final class FILE extends Response {
 	}
 
 	public byte[] getByteResponse(RequestHandler requestHandler) {
-		String emptyResponse = getEmptyResponse();
-		String corsHeaders = requestHandler.getCorsHeaders();
-		int emptyLineIndex = emptyResponse.indexOf("\r\n\r\n");
-		String sub = emptyResponse.substring(0, emptyLineIndex);
-		String res = sub + "\r\n" + corsHeaders + emptyResponse.substring(emptyLineIndex);
-		String response = res + new String(bytes);
-		return response.getBytes();
+		String headers = Response.OK +
+				getContentType() +
+				getContentLengthHeader() +
+				requestHandler.getCorsHeaders() +
+				"\r\n";
+		byte[] head = headers.getBytes();
+		byte[] response = new byte[head.length + bytes.length];
+
+		System.arraycopy(head, 0, response, 0, head.length);
+		System.arraycopy(bytes, 0, response, head.length, bytes.length);
+
+		return response;
 	}
 }
