@@ -3,6 +3,7 @@ package Test;
 import Eye.RequestHandler;
 import Eye.Local.FileManager;
 import Eye.Response.JSON;
+import Eye.Response.Response;
 import Eye.Route.ProtectedRoute;
 
 import java.io.IOException;
@@ -21,8 +22,7 @@ public class Datas extends ProtectedRoute {
 	}
 
 	@Override
-	protected String response() throws IOException {
-		JSON response = new JSON(FileManager.GetFileContent("datas.json"));
-		return response.getResponse();
+	protected Response response() throws IOException {
+		return new JSON(FileManager.GetFileContent("datas.json"));
 	}
 }

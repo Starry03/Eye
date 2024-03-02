@@ -1,6 +1,7 @@
 package Test2;
 
 import Eye.Response.HTML;
+import Eye.Response.Response;
 import Eye.Route.Route;
 
 import java.io.IOException;
@@ -11,10 +12,7 @@ public class Root extends Route {
 	}
 
 	@Override
-	protected String response() throws IOException {
-		HTML html = new HTML("Hello, World!");
-		String res = html.getResponse();
-		System.out.println(res);
-		return res;
+	protected Response response() throws IOException {
+		return new HTML("Hello, World!");
 	}
 }

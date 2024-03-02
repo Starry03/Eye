@@ -1,6 +1,7 @@
 package Eye.Response;
 
 import Eye.Logger.Logger;
+import Eye.RequestHandler;
 
 import java.nio.charset.StandardCharsets;
 
@@ -13,6 +14,7 @@ public abstract class Response {
 	public static final String SERVER_ERROR = "HTTP/1.1 500 Internal Server Error\r\n";
 	protected String content;
 	protected String contentType;
+	protected RequestHandler requestHandler;
 	protected int contentLength;
 
 	protected Response(String content, String contentType) {
@@ -32,6 +34,7 @@ public abstract class Response {
 		return OK +
 				contentType +
 				getContentLengthHeader() +
+				requestHandler.getCorsHeaders() +
 				"\r\n";
 	}
 

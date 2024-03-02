@@ -16,7 +16,7 @@ public final class FILE extends Response {
 		return "";
 	}
 
-	public byte[] getByteResponse(RequestHandler requestHandler) {
+	public byte[] getByteResponse() {
 		String headers = Response.OK +
 				getContentType() +
 				getContentLengthHeader() +

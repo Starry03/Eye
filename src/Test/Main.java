@@ -1,5 +1,6 @@
 package Test;
 
+import Eye.Logger.Logger;
 import Eye.Route.Route;
 import Eye.Security.Cors;
 import Eye.Route.RoutesHandler;
@@ -15,7 +16,6 @@ public class Main {
 				new Datas()
 		};
 		server.addRoutes(routes);
-
 		server.setCors(new Cors(
 				new String[]{
 						"http://localhost:3000",

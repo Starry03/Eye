@@ -55,9 +55,9 @@ public abstract class ResponseSender {
 				return;
 			}
 			Logger.info("Sending response from route: " + route.getPath());
-			String response = route.getResponse();
-			response = insertCorsHeaders(response, requestHandler);
-			writeResponse(response, outputStream);
+			Response response = route.getResponse();
+			response.requestHandler = requestHandler;
+			writeResponse(response.getResponse(), outputStream);
 			Logger.info("Response sent: " + route.getPath());
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
@@ -89,7 +89,8 @@ public abstract class ResponseSender {
 			}
 			byte[] content = FileManager.GetBinaryFileContent(absPath);
 			FILE file = new FILE(content, "file/unknown");
-			byte[] response = file.getByteResponse(requestHandler);
+			file.requestHandler = requestHandler;
+			byte[] response = file.getByteResponse();
 			writeResponse(response, outputStream);
 			Logger.info("Response sent: " + requestHandler.getPath());
 		} catch (IOException e) {

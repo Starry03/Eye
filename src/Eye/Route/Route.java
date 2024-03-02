@@ -1,6 +1,8 @@
 package Eye.Route;
 
 import Eye.RequestHandler;
+import Eye.Response.JSON;
+import Eye.Response.Response;
 
 import java.io.IOException;
 
@@ -15,15 +17,15 @@ public abstract class Route {
 	/**
 	 * This method is called by the endpoint thread to get the response
 	 */
-	public String getResponse() throws IOException {
+	public Response getResponse() throws IOException {
 		return response();
 	}
 
 	/**
 	 * Override this method to return a response
 	 */
-	protected String response() throws IOException {
-		return "Default eye response";
+	protected Response response() throws IOException {
+		return new JSON("{default_eye: 'hi'}");
 	}
 
 	@Override

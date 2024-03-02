@@ -1,5 +1,6 @@
 package Test;
 
+import Eye.Response.Response;
 import Eye.Server;
 import Eye.Local.FileManager;
 import Eye.Response.HTML;
@@ -13,8 +14,7 @@ public class Root extends Route {
 	}
 
 	@Override
-	protected String response() throws IOException {
-		HTML response = new HTML(FileManager.GetFileContent(Server.getRootPath() + "/index.html"));
-		return response.getResponse();
+	protected Response response() throws IOException {
+		return new HTML(FileManager.GetFileContent(Server.getRootPath() + "/index.html"));
 	}
 }
