@@ -1,9 +1,7 @@
 package Test;
 
-import Eye.Logger.Logger;
 import Eye.Route.Route;
 import Eye.Security.Cors;
-import Eye.Route.RoutesHandler;
 import Eye.Server;
 
 public class Main {
