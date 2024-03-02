@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Eye.iml" filepath="$PROJECT_DIR$/.idea/Eye.iml" />
-=======
       <module fileurl="file://$PROJECT_DIR$/Test.iml" filepath="$PROJECT_DIR$/Test.iml" />
->>>>>>> master
     </modules>
   </component>
 </project>

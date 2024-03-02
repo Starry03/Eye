@@ -1,7 +1,7 @@
 package Test;
 
 import Eye.Server;
-import Local.FileManager;
+import Eye.Local.FileManager;
 import Eye.Response.HTML;
 import Eye.Route.Route;
 

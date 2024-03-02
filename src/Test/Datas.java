@@ -1,7 +1,7 @@
 package Test;
 
 import Eye.RequestHandler;
-import Local.FileManager;
+import Eye.Local.FileManager;
 import Eye.Response.JSON;
 import Eye.Route.ProtectedRoute;
 

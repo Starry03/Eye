@@ -36,7 +36,7 @@ Response are standardized, just need bytes as parameter
 package Test;
 
 import Eye.Response.HTML;
-import Local.FileManager;
+import Eye.Local.FileManager;
 import Eye.Route.Route;
 
 import java.io.IOException;
