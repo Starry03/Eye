@@ -29,9 +29,7 @@ Server server = new Server(PORT);
 Server.setRootPath("src/Test/");
 
 Route[] routes = new Route[]{new Root()};
-server.
-
-addRoutes(routes);
+server.addRoutes(routes);
 
 Cors cors = new Cors(
 		new String[]{
