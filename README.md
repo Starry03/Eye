@@ -1,16 +1,13 @@
-# Eye
+# Eye 
 
 #### Java backend framework
 
-## Version 1.0.1
-
-## TO-DO
-
-- Memory safe response
+#### Version 1.0.2
 
 ## Features
 
 - Multi-thread request
+- Memory safe response
 - Routes
 - Cors
 
@@ -32,12 +29,7 @@ Route[] routes = new Route[]{new Root()};
 server.addRoutes(routes);
 
 Cors cors = new Cors(
-		new String[]{
-				"http://localhost:3000",
-				"https://localhost:3000",
-				"http://127.0.0.1:3000",
-				"https://127.0.0.1:3000"
-		},
+		new String[]{"*"},
 		new String[]{"GET", "POST"},
 		new String[]{"*"}
 );
@@ -49,4 +41,55 @@ server.setCors(cors);
 ```java
 Thread serverThread = new Thread(server);
 serverThread.start();
+```
+
+### Types of response
+
+From utilities provided by the framework
+
+- from ram         (String)
+- from system file (path)
+
+```java
+public final class HTML extends Response {
+	public HTML(String content) {
+		super(content, "Content-Type: text/html\r\n");
+	}
+
+	public HTML(Path path) {
+		super(path, "Content-Type: text/html\r\n");
+	}
+}
+```
+
+### Create route
+
+Ram response
+
+```java
+   public class Root extends Route {
+	public Root() {
+		super("/");
+	}
+
+	@Override
+	protected Response response() throws IOException {
+		return new HTML("Hello, World!");
+	}
+}
+```
+
+System file response
+
+```java
+public class Root extends Route {
+	public Root() {
+		super("/");
+	}
+
+	@Override
+	protected Response response() throws IOException {
+		return new HTML(Path.of("./index.html"));
+	}
+}
 ```

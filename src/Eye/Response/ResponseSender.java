@@ -96,7 +96,6 @@ public abstract class ResponseSender {
 		} catch (IOException e) {
 			writeResponse(Response.SERVER_ERROR, -2, outputStream);
 			Logger.error(e.getMessage());
-			Logger.error("500 sent");
 		}
 	}
 
