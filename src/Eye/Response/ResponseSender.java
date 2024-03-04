@@ -8,9 +8,9 @@ import Eye.RequestHandler;
 import Eye.Route.Route;
 import Eye.Route.RoutesHandler;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -19,17 +19,17 @@ import java.nio.file.Paths;
  * 2. verifies if request is authorized
  * 3. verifies if security is ok
  * 4. sends response to client
-*/
+ */
 public abstract class ResponseSender {
 
 	/**
 	 * Chooses between sending route response or file response
 	 *
-	 * @param path            path to be sent
-	 * @param outputStream    output stream
-	 * @param routesHandler   routes handler
-	 * @param requestHandler  request handler
-	*/
+	 * @param path           path to be sent
+	 * @param outputStream   output stream
+	 * @param routesHandler  routes handler
+	 * @param requestHandler request handler
+	 */
 	public static void send(String path, OutputStream outputStream,
 	                        RoutesHandler routesHandler, RequestHandler requestHandler) {
 		Route route = routesHandler.getRoutes().get(path);
@@ -42,70 +42,94 @@ public abstract class ResponseSender {
 	/**
 	 * Sends response to client
 	 *
-	 * @param route           route to be sent
-	 * @param outputStream    output stream
-	 * @param requestHandler  request handler
-	*/
+	 * @param route          route to be sent
+	 * @param outputStream   output stream
+	 * @param requestHandler request handler
+	 */
 	private static void sendRouteResponse(Route route, OutputStream outputStream, RequestHandler requestHandler) {
 		route.setRequestHandler(requestHandler);
 		try {
 			if (!SecurityChecker.isSecure(requestHandler, null)) {
-				writeResponse(Response.SERVER_ERROR, outputStream);
+				writeResponse(Response.SERVER_ERROR, -2, outputStream);
 				Logger.warning("Path: " + route.getPath() + "\n" + "Response: Server error");
 				return;
 			}
 			Response response = route.getResponse();
 			response.requestHandler = requestHandler;
-			writeResponse(response.getResponse(), outputStream);
+			writeResponse(response.getResponse(), -2, outputStream);
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
-			writeResponse(Response.SERVER_ERROR, outputStream);
+			writeResponse(Response.SERVER_ERROR, -2, outputStream);
 		}
 	}
 
 	/**
 	 * Sends response to client
 	 *
-	 * @param outputStream    output stream
-	 * @param requestHandler  request handler
-	*/
+	 * @param outputStream   output stream
+	 * @param requestHandler request handler
+	 */
 	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler) {
+		RandomAccessFile randomAccessFile;
 		Path absPath;
+		File file;
+		int bytesRead;
+		int byteCount;
+		final int bufferSize = 1024;
+		byte[] buffer = new byte[bufferSize];
 		try {
 			absPath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
-		}
-		catch (Exception e) {
-			writeResponse(Response.BAD_REQUEST, outputStream);
+		} catch (Exception e) {
+			writeResponse(Response.BAD_REQUEST, -2, outputStream);
 			Logger.warning("Path: " + requestHandler.getPath() + "\n" + "Response: bad request");
 			return;
 		}
 		try {
 			if (!SecurityChecker.isSecure(requestHandler, absPath)) {
-				writeResponse(Response.FORBIDDEN, outputStream);
+				writeResponse(Response.FORBIDDEN, -2, outputStream);
 				Logger.warning("Path: " + requestHandler.getPath() + "\n" + "Response: forbidden");
 				return;
 			}
-			byte[] content = FileManager.GetBinaryFileContent(absPath);
-			FILE file = new FILE(content, "file/unknown");
-			file.requestHandler = requestHandler;
-			byte[] response = file.getByteResponse();
-			writeResponse(response, outputStream);
-		} catch (IOException e) {
-			writeResponse(Response.NOT_FOUND, outputStream);
+			file = absPath.toFile();
+			try {
+				randomAccessFile = new RandomAccessFile(file, "r");
+			} catch (Exception e) {
+				throw new RuntimeException();
+			}
+			byteCount = 0;
+			bytesRead = randomAccessFile.read(buffer, byteCount, bufferSize);
+			byteCount += bytesRead;
+			FILE initResponse = new FILE(buffer, "application/octet-stream");
+			initResponse.requestHandler = requestHandler;
+			writeResponse(initResponse.getByteResponse(), -2, outputStream);
+			while (bytesRead != -1) {
+				bytesRead = randomAccessFile.read(buffer, 0, bufferSize);
+				byteCount += bytesRead;
+				writeResponse(buffer, bytesRead, outputStream);
+			}
+		} catch (Exception e) {
+			writeResponse(Response.SERVER_ERROR, -2, outputStream);
 			Logger.error(e.getMessage());
-			Logger.error("File not found: 404 sent");
+			Logger.error("500 sent");
 		}
 	}
 
 	/**
 	 * Writes response to output stream and flushes it
 	 *
-	 * @param response      response to be written
-	 * @param outputStream  output stream
-	*/
-	private static void writeResponse(byte[] response, OutputStream outputStream) {
+	 * @param response     response to be written
+	 * @param outputStream output stream
+	 */
+	public static void writeResponse(byte[] response, int len, OutputStream outputStream) {
+		byte[] buf;
+
+		if (len == -1) return;
+		if (len < response.length && len != -2) {
+			buf = new byte[len];
+			System.arraycopy(response, 0, buf, 0, len);
+		} else buf = response;
 		try {
-			outputStream.write(response);
+			outputStream.write(buf);
 			outputStream.flush();
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
@@ -115,10 +139,10 @@ public abstract class ResponseSender {
 	/**
 	 * Writes response to output stream and flushes it
 	 *
-	 * @param response      response to be written
-	 * @param outputStream  output stream
-	*/
-	private static void writeResponse(String response, OutputStream outputStream) {
-		writeResponse(response.getBytes(StandardCharsets.UTF_8), outputStream);
+	 * @param response     response to be written
+	 * @param outputStream output stream
+	 */
+	public static void writeResponse(String response, int len, OutputStream outputStream) {
+		writeResponse(response.getBytes(StandardCharsets.UTF_8), len, outputStream);
 	}
 }

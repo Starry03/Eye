@@ -67,7 +67,7 @@ public class Cors {
 	 * @brief checks if the origin is allowed by the cors policy implemented by the server
 	 */
 	private boolean isOriginAllowed(String origin) {
-		if (this.allowedOrigins[0].equals(ALL_WILDCARD)) return true;
+		if (allowedOrigins[0].equals(ALL_WILDCARD)) return true;
 		if (origin == null) return true;
 		return arrContains(allowedOrigins, origin);
 	}
@@ -120,13 +120,14 @@ public class Cors {
 	 */
 	public String getOriginHeader(String origin) {
 		StringBuilder res = new StringBuilder("Access-Control-Allow-Origin: ");
-		if (origin == null) return res.append("*\r\n").toString();
+		if (origin == null || allowedOrigins[0].equals(ALL_WILDCARD)) return res.append("*\r\n").toString();
 		if (origin.equals("same-origin") || origin.equals("none"))
 			return res.append("*\r\n").toString();
 		for (String allowedOrigin : allowedOrigins)
 			if (allowedOrigin.equals(origin))
 				return res.append(origin).append("\r\n").toString();
-		return res.append("none\r\n").toString();
+		Logger.error("Origin: blocked: " + origin);
+		return res.append("none\n").toString();
 	}
 
 	/**

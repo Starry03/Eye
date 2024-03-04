@@ -6,7 +6,7 @@
 
 ## TO-DO
 
-- Multi-thread response
+- Memory safe response
 
 ## Features
 

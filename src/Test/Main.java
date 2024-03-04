@@ -14,13 +14,8 @@ public class Main {
 		};
 		server.addRoutes(routes);
 		server.setCors(new Cors(
-				new String[]{
-						"http://localhost:3000",
-						"https://localhost:3000",
-						"http://127.0.0.1:3000",
-						"https://127.0.0.1:3000"
-				},
-				new String[]{"GET", "POST"},
+				new String[]{"*"},
+				new String[]{"*"},
 				new String[]{"*"}
 		));
 		Server.setRootPath("src/Test/");

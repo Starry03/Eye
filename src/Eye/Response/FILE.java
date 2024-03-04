@@ -1,6 +1,6 @@
 package Eye.Response;
 
-import Eye.RequestHandler;
+import Eye.Logger.Logger;
 
 public final class FILE extends Response {
 	private final byte[] bytes;

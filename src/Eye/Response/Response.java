@@ -27,7 +27,6 @@ public abstract class Response {
 	}
 
 	/**
-	 *
 	 * @return positive response with minimal headers
 	 */
 	protected final String getEmptyResponse() {
@@ -47,10 +46,6 @@ public abstract class Response {
 		return getEmptyResponse() + content;
 	}
 
-	public String getContent() {
-		return content;
-	}
-
 	public String getContentType() {
 		return contentType;
 	}
@@ -59,12 +54,7 @@ public abstract class Response {
 		return "Content-Length: " + getContentLength() + "\r\n";
 	}
 
-	@Override
-	public String toString() {
-		return "Response{" +
-				"content='" + content + '\'' +
-				", contentType='" + contentType + '\'' +
-				", contentLength=" + contentLength +
-				'}';
+	public void setRequestHandler(RequestHandler requestHandler) {
+		this.requestHandler = requestHandler;
 	}
 }
