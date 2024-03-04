@@ -53,8 +53,8 @@ public abstract class ResponseSender {
 				return;
 			}
 			Response response = route.getResponse();
-			if (response.stream) {
-				sendFileResponse(outputStream, requestHandler, route.getResponse().content);
+			if (response.getPath() != null) {
+				sendFileResponse(outputStream, requestHandler, route.getResponse().getPath());
 				return;
 			}
 
@@ -72,12 +72,12 @@ public abstract class ResponseSender {
 	 * @param outputStream   output stream
 	 * @param requestHandler request handler
 	 */
-	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler, String relPath) {
+	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler, Path relPath) {
 		Path absPath;
 
 		try {
 			if (relPath != null)
-				absPath = Paths.get(Server.getRootPath().toString(), relPath);
+				absPath = Paths.get(Server.getRootPath().toString(), relPath.toString());
 			else
 				absPath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
 		} catch (Exception e) {

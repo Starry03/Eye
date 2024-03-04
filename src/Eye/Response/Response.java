@@ -18,13 +18,6 @@ public abstract class Response {
 	protected Path path;
 	protected RequestHandler requestHandler;
 
-	/**
-	 * if true, response will be streamed to the client in 1024 byte chunks
-	 * it works only for files
-	 *
-	 * @see Eye.Response.ByteStreamResponse
-	 */
-	protected boolean stream;
 	protected long contentLength;
 
 	protected Response(String content, String contentType) {
@@ -32,18 +25,20 @@ public abstract class Response {
 		this.contentType = contentType;
 	}
 
-	protected Response(Path path, boolean stream) {
+	protected Response(Path path) {
 		this.path = path;
 		this.contentType = "application/octet-stream";
-		this.stream = stream;
 	}
 
-	protected Response(Path path, String contentType, boolean stream) {
+	protected Response(Path path, String contentType) {
 		this.path = path;
 		this.contentType = contentType;
-		this.stream = stream;
 	}
-	
+
+	public Path getPath() {
+		return path;
+	}
+
 	protected void setContentLength(long contentLength) {
 		this.contentLength = contentLength;
 	}
