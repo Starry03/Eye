@@ -2,7 +2,6 @@ package Eye.Response;
 
 import Eye.Security.SecurityChecker;
 import Eye.Server;
-import Eye.Local.FileManager;
 import Eye.Logger.Logger;
 import Eye.RequestHandler;
 import Eye.Route.Route;
@@ -10,7 +9,6 @@ import Eye.Route.RoutesHandler;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -36,7 +34,7 @@ public abstract class ResponseSender {
 		if (route != null)
 			sendRouteResponse(route, outputStream, requestHandler);
 		else
-			sendFileResponse(outputStream, requestHandler);
+			sendFileResponse(outputStream, requestHandler, null);
 	}
 
 	/**
@@ -55,7 +53,12 @@ public abstract class ResponseSender {
 				return;
 			}
 			Response response = route.getResponse();
-			response.requestHandler = requestHandler;
+			if (response.stream) {
+				sendFileResponse(outputStream, requestHandler, route.getResponse().content);
+				return;
+			}
+
+			response.setRequestHandler(requestHandler);
 			writeResponse(response.getResponse(), -2, outputStream);
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
@@ -69,16 +72,14 @@ public abstract class ResponseSender {
 	 * @param outputStream   output stream
 	 * @param requestHandler request handler
 	 */
-	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler) {
-		RandomAccessFile randomAccessFile;
+	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler, String relPath) {
 		Path absPath;
-		File file;
-		int bytesRead;
-		int byteCount;
-		final int bufferSize = 1024;
-		byte[] buffer = new byte[bufferSize];
+
 		try {
-			absPath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
+			if (relPath != null)
+				absPath = Paths.get(Server.getRootPath().toString(), relPath);
+			else
+				absPath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
 		} catch (Exception e) {
 			writeResponse(Response.BAD_REQUEST, -2, outputStream);
 			Logger.warning("Path: " + requestHandler.getPath() + "\n" + "Response: bad request");
@@ -90,24 +91,9 @@ public abstract class ResponseSender {
 				Logger.warning("Path: " + requestHandler.getPath() + "\n" + "Response: forbidden");
 				return;
 			}
-			file = absPath.toFile();
-			try {
-				randomAccessFile = new RandomAccessFile(file, "r");
-			} catch (Exception e) {
-				throw new RuntimeException();
-			}
-			byteCount = 0;
-			bytesRead = randomAccessFile.read(buffer, byteCount, bufferSize);
-			byteCount += bytesRead;
-			FILE initResponse = new FILE(buffer, "application/octet-stream");
-			initResponse.requestHandler = requestHandler;
-			writeResponse(initResponse.getByteResponse(), -2, outputStream);
-			while (bytesRead != -1) {
-				bytesRead = randomAccessFile.read(buffer, 0, bufferSize);
-				byteCount += bytesRead;
-				writeResponse(buffer, bytesRead, outputStream);
-			}
-		} catch (Exception e) {
+			ByteStreamResponse res = new ByteStreamResponse(absPath.toString());
+			res.streamBytes(outputStream, requestHandler);
+		} catch (IOException e) {
 			writeResponse(Response.SERVER_ERROR, -2, outputStream);
 			Logger.error(e.getMessage());
 			Logger.error("500 sent");

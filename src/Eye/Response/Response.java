@@ -4,6 +4,7 @@ import Eye.Logger.Logger;
 import Eye.RequestHandler;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 public abstract class Response {
 	public static final String OK = "HTTP/1.1 200 OK\r\n";
@@ -14,16 +15,41 @@ public abstract class Response {
 	public static final String SERVER_ERROR = "HTTP/1.1 500 Internal Server Error\r\n";
 	protected String content;
 	protected String contentType;
+	protected Path path;
 	protected RequestHandler requestHandler;
-	protected int contentLength;
+
+	/**
+	 * if true, response will be streamed to the client in 1024 byte chunks
+	 * it works only for files
+	 *
+	 * @see Eye.Response.ByteStreamResponse
+	 */
+	protected boolean stream;
+	protected long contentLength;
 
 	protected Response(String content, String contentType) {
 		this.content = content;
 		this.contentType = contentType;
 	}
 
-	protected final int getContentLength() {
-		return content.getBytes(StandardCharsets.UTF_8).length;
+	protected Response(Path path, boolean stream) {
+		this.path = path;
+		this.contentType = "application/octet-stream";
+		this.stream = stream;
+	}
+
+	protected Response(Path path, String contentType, boolean stream) {
+		this.path = path;
+		this.contentType = contentType;
+		this.stream = stream;
+	}
+	
+	protected void setContentLength(long contentLength) {
+		this.contentLength = contentLength;
+	}
+
+	protected final long getContentLength() {
+		return contentLength;
 	}
 
 	/**
@@ -35,6 +61,10 @@ public abstract class Response {
 				getContentLengthHeader() +
 				requestHandler.getCorsHeaders() +
 				"\r\n";
+	}
+
+	public String getContent() {
+		return content;
 	}
 
 	public String getResponse() {

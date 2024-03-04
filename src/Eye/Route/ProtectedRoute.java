@@ -1,7 +1,7 @@
 package Eye.Route;
 
 import Eye.Response.Response;
-import Eye.Response.UNAUTHORIZED;
+import Eye.Response.Unauthorized;
 
 import java.io.IOException;
 
@@ -25,7 +25,7 @@ public class ProtectedRoute extends Route {
 		if (!isProtected) return response();
 		else if (isAuthorized())
 			return response();
-		return new UNAUTHORIZED();
+		return Unauthorized.getInstance();
 	}
 
 	/**
