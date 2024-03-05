@@ -1,6 +1,11 @@
 package Eye.Logger;
 
 public abstract class Logger {
+	/**
+	 * Logger class for logging messages to the console.
+	 * It can log messages with different colors.
+	 * It can be turned off.
+	 */
 	private static boolean isActive = true;
 	private static String defaultColor = Color.WHITE;
 
@@ -12,6 +17,11 @@ public abstract class Logger {
 		System.out.print(defaultColor);
 	}
 
+	/**
+	 * Sets the logger active or inactive.
+	 *
+	 * @param active true if active, false if inactive
+	 */
 	public static void setActive(boolean active) {
 		isActive = active;
 	}
