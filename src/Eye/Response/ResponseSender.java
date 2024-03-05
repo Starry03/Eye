@@ -92,7 +92,7 @@ public abstract class ResponseSender {
 				return;
 			}
 			ByteStreamResponse res = new ByteStreamResponse(absPath.toString());
-			res.streamBytes(outputStream, requestHandler);
+			res.streamBytes(outputStream);
 		} catch (IOException e) {
 			writeResponse(Response.SERVER_ERROR, -2, outputStream);
 			Logger.error(e.getMessage());

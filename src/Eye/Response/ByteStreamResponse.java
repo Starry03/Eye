@@ -1,7 +1,6 @@
 package Eye.Response;
 
 import Eye.Logger.Logger;
-import Eye.RequestHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,27 +59,21 @@ public final class ByteStreamResponse extends Response {
 	 * @param requestHandler request handler
 	 * @throws IOException if an I/O error occurs
 	 */
-	public void streamBytes(OutputStream stream, RequestHandler requestHandler) throws IOException {
+	public void streamBytes(OutputStream stream) throws IOException {
 		int bytesRead;
-		int byteCount;
 		final int bufferSize = 1024 * 64;
 		byte[] buffer = new byte[bufferSize];
 		RandomAccessFile randomAccessFile;
-
-		setRequestHandler(requestHandler);
 		try {
 			randomAccessFile = new RandomAccessFile(file, "r");
 		} catch (Exception e) {
 			Logger.error(e.getMessage());
 			return;
 		}
-		byteCount = 0;
-		bytesRead = randomAccessFile.read(buffer, byteCount, bufferSize);
-		byteCount += bytesRead;
+		bytesRead = randomAccessFile.read(buffer, 0, bufferSize);
 		writeResponse(getInitialResponse(buffer), getHeader().length() + bytesRead, stream);
 		while (bytesRead != -1) {
 			bytesRead = randomAccessFile.read(buffer, 0, bufferSize);
-			byteCount += bytesRead;
 			writeResponse(buffer, bytesRead, stream);
 		}
 		randomAccessFile.close();

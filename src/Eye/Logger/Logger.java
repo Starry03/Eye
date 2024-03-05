@@ -3,6 +3,7 @@ package Eye.Logger;
 public abstract class Logger {
 	private static boolean isActive = true;
 	private static String defaultColor = Color.WHITE;
+
 	public static void setDefaultColor(String color) {
 		defaultColor = color;
 	}
@@ -29,6 +30,10 @@ public abstract class Logger {
 
 	public static void warning(String message) {
 		log(message, Color.ORANGE, "--- WARNING ---");
+	}
+
+	public static void debug(String message) {
+		log(message, Color.BLUE, "--- DEBUG ---");
 	}
 
 	private static void log(String message, String color, String label) {
