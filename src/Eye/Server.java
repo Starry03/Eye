@@ -14,9 +14,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Server implements Runnable {
 	public static int DEFAULT_PORT = 3000;
 	private int requestsRunning = 0;
-	private static final int REQUESTS_RUNNING_LIMIT = 100;
-	private static final int REQUEST_QUEUE_LIMIT = 500;
-	private final LinkedBlockingQueue<Socket> requestsQueue = new LinkedBlockingQueue<>(Server.REQUEST_QUEUE_LIMIT);
+	private static int REQUESTS_RUNNING_LIMIT = 100;
+	private static int REQUEST_QUEUE_LIMIT = 500;
 	private boolean executed = false;
 	private boolean running = true;
 	private final ServerSocket serverSocket;
@@ -47,19 +46,17 @@ public class Server implements Runnable {
 		ServerSafeStopper serverSafeStopper = new ServerSafeStopper(this);
 		Thread serverSafeStopperThread = new Thread(serverSafeStopper);
 		serverSafeStopperThread.start();
-		Logger.info("Server started\n" + "Port: " + getPort() + "\n");
+		final LinkedBlockingQueue<Socket> requestsQueue = new LinkedBlockingQueue<>(Server.REQUEST_QUEUE_LIMIT);
 		Socket currentSocket;
 		Socket queuedSocket;
 		EndpointThread endpointThread;
 		Thread thread;
+		Logger.info("Server started\n" + "Port: " + getPort() + "\n");
 		while (running) {
-			Logger.info("Requests running: " + requestsRunning);
 			try {
 				currentSocket = serverSocket.accept();
-				Logger.info("Request arrived");
 				if (requestsRunning >= Server.REQUESTS_RUNNING_LIMIT) {
 					requestsQueue.add(currentSocket);
-					Logger.info("Request queued");
 					continue;
 				}
 				queuedSocket = requestsQueue.poll();
@@ -131,5 +128,13 @@ public class Server implements Runnable {
 
 	public void removeRequestRunning() {
 		requestsRunning--;
+	}
+
+	public void setRequestsRunningLimit(int limit) {
+		Server.REQUESTS_RUNNING_LIMIT = limit;
+	}
+
+	public void setRequestQueueLimit(int limit) {
+		Server.REQUEST_QUEUE_LIMIT = limit;
 	}
 }
