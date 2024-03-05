@@ -40,12 +40,14 @@ class EndpointThread implements Runnable {
 	public synchronized void run() {
 		if (executed) return;
 		executed = true;
+		server.addRequestRunning();
 		Scanner scanner = new Scanner(inputStream);
 		RequestHandler requestHandler = new RequestHandler(scanner, server);
 		String path = requestHandler.getPath();
 		ResponseSender.send(path, outputStream, server.getRoutesHandler(), requestHandler);
 		closeConnection();
 		scanner.close();
+		server.removeRequestRunning();
 	}
 
 	public synchronized boolean isExecuted() {
