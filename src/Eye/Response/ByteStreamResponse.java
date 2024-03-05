@@ -83,5 +83,6 @@ public final class ByteStreamResponse extends Response {
 			byteCount += bytesRead;
 			writeResponse(buffer, bytesRead, stream);
 		}
+		randomAccessFile.close();
 	}
 }
