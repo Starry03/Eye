@@ -1,6 +1,7 @@
 package Eye.Response;
 
 import Eye.Logger.Logger;
+import Eye.RequestHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,14 +13,14 @@ import static Eye.Response.ResponseSender.writeResponse;
 public final class ByteStreamResponse extends Response {
 	private final File file;
 
-	public ByteStreamResponse(String path) {
+	public ByteStreamResponse(String path, RequestHandler requestHandler) {
 		super("content is bytes", "application/octet-stream");
 		this.file = new File(path);
 		setContentLength(file.length());
 		setRequestHandler(requestHandler);
 	}
 
-	public ByteStreamResponse(String path, String contentType) {
+	public ByteStreamResponse(String path, String contentType, RequestHandler requestHandler) {
 		super("content is bytes", contentType);
 		this.file = new File(path);
 		setContentLength(file.length());

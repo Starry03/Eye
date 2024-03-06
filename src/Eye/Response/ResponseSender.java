@@ -91,7 +91,7 @@ public abstract class ResponseSender {
 				Logger.warning("Path: " + requestHandler.getPath() + "\n" + "Response: forbidden");
 				return;
 			}
-			ByteStreamResponse res = new ByteStreamResponse(absPath.toString());
+			ByteStreamResponse res = new ByteStreamResponse(absPath.toString(), requestHandler);
 			res.streamBytes(outputStream);
 		} catch (IOException e) {
 			writeResponse(Response.SERVER_ERROR, -2, outputStream);

@@ -55,6 +55,7 @@ public class Server implements Runnable {
 		while (running) {
 			try {
 				currentSocket = serverSocket.accept();
+				if (!running) break;
 				if (requestsRunning >= Server.REQUESTS_RUNNING_LIMIT) {
 					requestsQueue.add(currentSocket);
 					continue;
@@ -68,7 +69,6 @@ public class Server implements Runnable {
 						this,
 						currentSocket
 				);
-				if (!running) break;
 				thread = new Thread(endpointThread);
 				thread.start();
 			} catch (IOException exception) {
