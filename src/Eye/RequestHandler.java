@@ -3,6 +3,7 @@ package Eye;
 import Eye.Security.Cors;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -85,5 +86,10 @@ public class RequestHandler {
 
 	public String getReferer() {
 		return headers.get("Referer");
+	}
+
+	@Override
+	public String toString() {
+		return getMethod() + " " + getPath() + " " + getTime().truncatedTo(ChronoUnit.SECONDS);
 	}
 }
