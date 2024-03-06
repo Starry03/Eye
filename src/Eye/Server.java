@@ -43,10 +43,10 @@ public class Server implements Runnable {
 	public synchronized void run() {
 		if (executed) return;
 		executed = true;
+		LinkedBlockingQueue<Socket> requestsQueue = new LinkedBlockingQueue<>(Server.REQUEST_QUEUE_LIMIT);
 		ServerSafeStopper serverSafeStopper = new ServerSafeStopper(this);
 		Thread serverSafeStopperThread = new Thread(serverSafeStopper);
 		serverSafeStopperThread.start();
-		final LinkedBlockingQueue<Socket> requestsQueue = new LinkedBlockingQueue<>(Server.REQUEST_QUEUE_LIMIT);
 		Socket currentSocket;
 		Socket queuedSocket;
 		EndpointThread endpointThread;
