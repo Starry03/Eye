@@ -57,7 +57,6 @@ public final class ByteStreamResponse extends Response {
 	 * Streams bytes to the client
 	 *
 	 * @param stream         output stream
-	 * @param requestHandler request handler
 	 * @throws IOException if an I/O error occurs
 	 */
 	public void streamBytes(OutputStream stream) throws IOException {
