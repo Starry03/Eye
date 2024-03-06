@@ -3,7 +3,6 @@ package Eye.Response;
 import Eye.Logger.Logger;
 import Eye.RequestHandler;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public abstract class Response {

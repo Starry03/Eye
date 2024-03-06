@@ -1,8 +1,8 @@
 package Eye.Security;
 
+import Eye.Logger.Logger;
 import Eye.RequestHandler;
 import Eye.Server;
-import Eye.Logger.Logger;
 
 import java.io.IOException;
 import java.nio.file.InvalidPathException;

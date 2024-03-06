@@ -1,13 +1,14 @@
 package Eye.Response;
 
-import Eye.Security.SecurityChecker;
-import Eye.Server;
 import Eye.Logger.Logger;
 import Eye.RequestHandler;
 import Eye.Route.Route;
 import Eye.Route.RoutesHandler;
+import Eye.Security.SecurityChecker;
+import Eye.Server;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;

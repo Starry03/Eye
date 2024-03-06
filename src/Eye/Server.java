@@ -1,9 +1,9 @@
 package Eye;
 
-import Eye.Route.Route;
-import Eye.Security.Cors;
 import Eye.Logger.Logger;
+import Eye.Route.Route;
 import Eye.Route.RoutesHandler;
+import Eye.Security.Cors;
 
 import java.io.IOException;
 import java.net.ServerSocket;
