@@ -23,6 +23,10 @@ public class Server implements Runnable {
 	private static Path rootPath = Path.of("./");
 	private Cors cors = new Cors();
 
+	/**
+	 * @param port server port
+	 * @throws RuntimeException if server cannot be created
+	 */
 	public Server(int port) throws RuntimeException {
 		try {
 			this.serverSocket = new ServerSocket(port);
@@ -31,6 +35,9 @@ public class Server implements Runnable {
 		}
 	}
 
+	/**
+	 * @throws RuntimeException if server cannot be created
+	 */
 	public Server() throws RuntimeException {
 		try {
 			this.serverSocket = new ServerSocket(Server.DEFAULT_PORT);
