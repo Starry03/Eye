@@ -14,8 +14,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Server implements Runnable {
 	public static int DEFAULT_PORT = 3000;
 	private int requestsRunning = 0;
-	private static int REQUESTS_RUNNING_LIMIT = 100;
-	private static int REQUEST_QUEUE_LIMIT = 500;
+	private static int REQUESTS_RUNNING_LIMIT = 100 * 100;
+	private static int REQUEST_QUEUE_LIMIT = 500 * 100;
 	private boolean executed = false;
 	private boolean running = true;
 	private final ServerSocket serverSocket;
@@ -57,7 +57,11 @@ public class Server implements Runnable {
 				currentSocket = serverSocket.accept();
 				if (!running) break;
 				if (requestsRunning >= Server.REQUESTS_RUNNING_LIMIT) {
-					requestsQueue.add(currentSocket);
+					try {
+						requestsQueue.add(currentSocket);
+					} catch (IllegalStateException e) {
+						continue;
+					}
 					continue;
 				}
 				queuedSocket = requestsQueue.poll();

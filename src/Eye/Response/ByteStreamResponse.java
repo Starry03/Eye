@@ -14,13 +14,13 @@ public final class ByteStreamResponse extends Response {
 	private final File file;
 
 	public ByteStreamResponse(String path, RequestHandler requestHandler) {
-		super("content is bytes", "application/octet-stream");
+		super("content is bytes", "Content-Type: application/octet-stream\r\n");
 		this.file = new File(path);
 		setContentLength(file.length());
 		setRequestHandler(requestHandler);
 	}
 
-	public ByteStreamResponse(String path, String contentType, RequestHandler requestHandler) {
+	public ByteStreamResponse(String path, RequestHandler requestHandler, String contentType) {
 		super("content is bytes", contentType);
 		this.file = new File(path);
 		setContentLength(file.length());

@@ -15,7 +15,7 @@ public class Main {
 		server.addRoutes(routes);
 		server.setCors(new Cors(
 				new String[]{"*"},
-				new String[]{"*"},
+				new String[]{"GET", "POST"},
 				new String[]{"*"}
 		));
 		Server.setRootPath("src/Test/");

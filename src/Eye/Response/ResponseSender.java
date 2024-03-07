@@ -55,7 +55,7 @@ public abstract class ResponseSender {
 			}
 			Response response = route.getResponse();
 			if (response.getPath() != null) {
-				sendFileResponse(outputStream, requestHandler, route.getResponse().getPath());
+				sendFileResponse(outputStream, requestHandler, response);
 				return;
 			}
 			response.setRequestHandler(requestHandler);
@@ -72,12 +72,13 @@ public abstract class ResponseSender {
 	 * @param outputStream   output stream
 	 * @param requestHandler request handler
 	 */
-	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler, Path relPath) {
+	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler, Response routeResponse) {
 		Path absPath;
+		ByteStreamResponse res;
 
 		try {
-			if (relPath != null)
-				absPath = Paths.get(Server.getRootPath().toString(), relPath.toString());
+			if (routeResponse != null)
+				absPath = Paths.get(Server.getRootPath().toString(), routeResponse.getPath().toString());
 			else
 				absPath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
 		} catch (Exception e) {
@@ -92,7 +93,9 @@ public abstract class ResponseSender {
 				Logger.warning(requestHandler.toString() + "\nResponse: forbidden");
 				return;
 			}
-			ByteStreamResponse res = new ByteStreamResponse(absPath.toString(), requestHandler);
+			if (routeResponse != null)
+				res = new ByteStreamResponse(absPath.toString(), requestHandler, routeResponse.getContentType());
+			else res = new ByteStreamResponse(absPath.toString(), requestHandler);
 			res.streamBytes(outputStream);
 		} catch (IOException e) {
 			writeResponse(Response.SERVER_ERROR, -2, outputStream);
