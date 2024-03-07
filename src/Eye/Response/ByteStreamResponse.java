@@ -13,13 +13,24 @@ import static Eye.Response.ResponseSender.writeResponse;
 public final class ByteStreamResponse extends Response {
 	private final File file;
 
+	/**
+	 *
+	 * @param path file path
+	 * @param requestHandler request handler
+	 */
 	public ByteStreamResponse(String path, RequestHandler requestHandler) {
-		super("content is bytes", "Content-Type: application/octet-stream\r\n");
+		super("content is bytes", "");
 		this.file = new File(path);
 		setContentLength(file.length());
 		setRequestHandler(requestHandler);
 	}
 
+	/**
+	 *
+	 * @param path file path
+	 * @param requestHandler request handler
+	 * @param contentType content type header
+	 */
 	public ByteStreamResponse(String path, RequestHandler requestHandler, String contentType) {
 		super("content is bytes", contentType);
 		this.file = new File(path);
@@ -27,11 +38,17 @@ public final class ByteStreamResponse extends Response {
 		setRequestHandler(requestHandler);
 	}
 
+	/**
+	 * @return ""
+	 */
 	@Override
 	public String getResponse() {
 		return "";
 	}
 
+	/**
+	 * @return headers
+	 */
 	private String getHeader() {
 		return Response.OK +
 				getContentType() +
