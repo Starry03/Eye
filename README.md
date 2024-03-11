@@ -9,7 +9,10 @@
 - Multi-thread request
 - Memory safe response
 - Routes
-- Cors
+
+## Todo
+
+- fix cors
 
 ## How to use
 
