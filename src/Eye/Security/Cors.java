@@ -95,26 +95,6 @@ public class Cors {
 	}
 
 	/**
-	 * @param requestHandler the request handler
-	 * @return if the request is allowed by the cors policy
-	 */
-	public boolean corsAllows(RequestHandler requestHandler) {
-		boolean isOriginAllowed = isOriginAllowed(requestHandler.getReferer());
-		boolean isMethodAllowed = isMethodAllowed(requestHandler.getMethod());
-		boolean isHeadersAllowed = isHeadersAllowed(requestHandler);
-		boolean allowed = isOriginAllowed && isMethodAllowed && isHeadersAllowed;
-		if (!allowed) {
-			Logger.error(
-					"Cors error\n" +
-							"originAllowed: " + isOriginAllowed + "\n" +
-							"methodAllowed: " + isMethodAllowed + "\n" +
-							"headersAllowed: " + isHeadersAllowed
-			);
-		}
-		return allowed;
-	}
-
-	/**
 	 * @param origin the origin
 	 * @return a string with the origin http header
 	 */
@@ -127,7 +107,7 @@ public class Cors {
 			if (allowedOrigin.equals(origin))
 				return res.append(origin).append("\r\n").toString();
 		Logger.error("Origin: blocked: " + origin);
-		return res.append("none\n").toString();
+		return "";
 	}
 
 	/**

@@ -11,9 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public abstract class SecurityChecker {
-	public static boolean isSecure(RequestHandler requestHandler, Path absPath) {
-		if (absPath == null) return requestHandler.isAuthorized();
-		return SecurityChecker.pathIsOk(absPath.toString()) && requestHandler.isAuthorized();
+	public static boolean isSecure(Path absPath) {
+		return SecurityChecker.pathIsOk(absPath.toString());
 	}
 
 	/**

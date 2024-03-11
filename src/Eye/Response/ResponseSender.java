@@ -48,11 +48,6 @@ public abstract class ResponseSender {
 	private static void sendRouteResponse(Route route, OutputStream outputStream, RequestHandler requestHandler) {
 		route.setRequestHandler(requestHandler);
 		try {
-			if (!SecurityChecker.isSecure(requestHandler, null)) {
-				writeResponse(Response.SERVER_ERROR, -2, outputStream);
-				Logger.warning("Path: " + route.getPath() + "\nResponse: Server error");
-				return;
-			}
 			Response response = route.getResponse();
 			if (response.getPath() != null) {
 				sendFileResponse(outputStream, requestHandler, response);
@@ -88,7 +83,7 @@ public abstract class ResponseSender {
 			return;
 		}
 		try {
-			if (!SecurityChecker.isSecure(requestHandler, absPath)) {
+			if (!SecurityChecker.isSecure(absPath)) {
 				writeResponse(Response.FORBIDDEN, -2, outputStream);
 				Logger.warning(requestHandler.toString() + "\nResponse: forbidden");
 				return;

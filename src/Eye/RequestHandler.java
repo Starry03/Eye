@@ -8,22 +8,26 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class RequestHandler {
-	HashMap<String, String> headers = new HashMap<>();
+	private final HashMap<String, String> headers = new HashMap<>();
 	private final HashMap<String, String> queryParams;
 	private final LocalTime time;
 	private final Cors cors;
-	private final boolean authorized;
 
 	public RequestHandler(Scanner scanner, Server server) {
 		this.time = LocalTime.now();
 		this.queryParams = new HashMap<>();
 		this.parseRequest(scanner);
 		this.cors = server.getCors();
-		this.authorized = cors.corsAllows(this);
 	}
 
+	/**
+	 *
+	 * @return none if there isn't origin, cors headers otherwise
+	 */
 	public String getCorsHeaders() {
-		return cors.getOriginHeader(getHeader("referer")) +
+		if (this.getHeader("origin") == null) return "";
+
+		return cors.getOriginHeader(getHeader("origin")) +
 				cors.getAllowedMethodsHeader() +
 				cors.getAllowedHeadersHeader() +
 				"Access-Control-Allow-Credentials: true\r\n";
@@ -72,20 +76,14 @@ public class RequestHandler {
 		return headers.get("method");
 	}
 
+	public String getOrigin() { return headers.get("origin"); }
+
 	public String getHeader(String header) {
 		return headers.get(header);
 	}
 
 	public HashMap<String, String> getQueryParams() {
 		return queryParams;
-	}
-
-	public boolean isAuthorized() {
-		return authorized;
-	}
-
-	public String getReferer() {
-		return headers.get("Referer");
 	}
 
 	@Override
