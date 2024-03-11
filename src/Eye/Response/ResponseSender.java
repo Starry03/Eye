@@ -56,7 +56,7 @@ public abstract class ResponseSender {
 			response.setRequestHandler(requestHandler);
 			writeResponse(response.getResponse(), -2, outputStream);
 		} catch (IOException e) {
-			writeResponse(Response.SERVER_ERROR, -2, outputStream);
+			writeResponse(Responses.SERVER_ERROR, -2, outputStream);
 			Logger.error(requestHandler.toString() + "\nResponse: server error");
 		}
 	}
@@ -77,14 +77,14 @@ public abstract class ResponseSender {
 			else
 				absPath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
 		} catch (Exception e) {
-			writeResponse(Response.BAD_REQUEST, -2, outputStream);
+			writeResponse(Responses.BAD_REQUEST, -2, outputStream);
 			Logger.warning
 					(requestHandler.toString() + "\nResponse: bad request");
 			return;
 		}
 		try {
 			if (!SecurityChecker.isSecure(absPath)) {
-				writeResponse(Response.FORBIDDEN, -2, outputStream);
+				writeResponse(Responses.FORBIDDEN, -2, outputStream);
 				Logger.warning(requestHandler.toString() + "\nResponse: forbidden");
 				return;
 			}
@@ -93,7 +93,7 @@ public abstract class ResponseSender {
 			else res = new ByteStreamResponse(absPath.toString(), requestHandler);
 			res.streamBytes(outputStream);
 		} catch (IOException e) {
-			writeResponse(Response.SERVER_ERROR, -2, outputStream);
+			writeResponse(Responses.SERVER_ERROR, -2, outputStream);
 			Logger.error(requestHandler.toString() + "\nResponse: server error");
 		}
 	}

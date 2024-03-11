@@ -6,16 +6,10 @@ import Eye.RequestHandler;
 import java.nio.file.Path;
 
 public abstract class Response {
-	public static final String OK = "HTTP/1.1 200 OK\r\n";
-	public static final String BAD_REQUEST = "HTTP/1.1 400 Bad Request\r\n";
-	public static final String UNAUTHORIZED = "HTTP/1.1 401 Unauthorized\r\n";
-	public static final String FORBIDDEN = "HTTP/1.1 403 Forbidden\r\n";
-	public static final String NOT_FOUND = "HTTP/1.1 404 Not Found\r\n";
-	public static final String SERVER_ERROR = "HTTP/1.1 500 Internal Server Error\r\n";
-	protected String content;
-	protected String contentType;
-	protected Path path;
-	protected RequestHandler requestHandler;
+	private Path path;
+	private String content;
+	private final String contentType;
+	private RequestHandler requestHandler;
 
 	protected long contentLength;
 
@@ -38,11 +32,11 @@ public abstract class Response {
 		return path;
 	}
 
-	protected void setContentLength(long contentLength) {
+	protected final void setContentLength(long contentLength) {
 		this.contentLength = contentLength;
 	}
 
-	protected final long getContentLength() {
+	private long getContentLength() {
 		return contentLength;
 	}
 
@@ -50,7 +44,7 @@ public abstract class Response {
 	 * @return positive response with minimal headers
 	 */
 	protected final String getEmptyResponse() {
-		return OK +
+		return Responses.OK +
 				contentType +
 				getContentLengthHeader() +
 				requestHandler.getCorsHeaders() +
@@ -64,7 +58,7 @@ public abstract class Response {
 	public String getResponse() {
 		if (content == null || content.isEmpty()) {
 			Logger.error("Response content is null or empty");
-			return NOT_FOUND;
+			return Responses.NOT_FOUND;
 		}
 
 		return getEmptyResponse() + content;
@@ -81,4 +75,5 @@ public abstract class Response {
 	public void setRequestHandler(RequestHandler requestHandler) {
 		this.requestHandler = requestHandler;
 	}
+	public RequestHandler getRequestHandler() { return requestHandler; }
 }

@@ -6,7 +6,7 @@ public final class Unauthorized extends Response {
 	 */
 	private static final Unauthorized unauthorized = new Unauthorized();
 	private Unauthorized() {
-		super(Response.UNAUTHORIZED, "");
+		super(Responses.UNAUTHORIZED, "");
 	}
 
 	/**

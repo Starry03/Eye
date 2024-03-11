@@ -14,7 +14,7 @@ public class Main {
 		};
 		server.addRoutes(routes);
 		server.setCors(new Cors(
-				new String[]{"localhost:3000"},
+				new String[]{"*"},
 				new String[]{"GET", "POST", "OPTIONS"},
 				new String[]{"*"}
 		));

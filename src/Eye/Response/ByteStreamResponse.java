@@ -50,10 +50,10 @@ public final class ByteStreamResponse extends Response {
 	 * @return headers
 	 */
 	private String getHeader() {
-		return Response.OK +
+		return Responses.OK +
 				getContentType() +
 				getContentLengthHeader() +
-				requestHandler.getCorsHeaders() +
+				getRequestHandler().getCorsHeaders() +
 				"\r\n";
 	}
 
