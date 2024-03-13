@@ -1,5 +1,6 @@
 package Test;
 
+import Eye.RequestHandler;
 import Eye.Response.Response;
 import Eye.Response.HTML;
 import Eye.Route.Route;
@@ -14,6 +15,8 @@ public class Root extends Route {
 
 	@Override
 	protected Response response() throws IOException {
+		// access request handler in the route
+		RequestHandler requestHandler = getRequestHandler();
 		return new HTML(Path.of("./index.html"));
 	}
 }

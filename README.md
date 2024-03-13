@@ -70,13 +70,17 @@ public final class HTML extends Response {
 Ram response
 
 ```java
-   public class Root extends Route {
+   import Eye.RequestHandler;
+
+public class Root extends Route {
 	public Root() {
 		super("/");
 	}
 
 	@Override
 	protected Response response() throws IOException {
+		// you can access query parameters from RequestHandler
+		RequestHandler request = getRequest();
 		return new HTML("Hello, World!");
 	}
 }
@@ -92,6 +96,8 @@ public class Root extends Route {
 
 	@Override
 	protected Response response() throws IOException {
+		// you can access query parameters from RequestHandler
+		RequestHandler request = getRequest();
 		return new HTML(Path.of("./index.html"));
 	}
 }
