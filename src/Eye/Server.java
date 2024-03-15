@@ -55,38 +55,39 @@ public class Server implements Runnable {
 		Thread serverSafeStopperThread = new Thread(serverSafeStopper);
 		serverSafeStopperThread.start();
 		Socket currentSocket;
-		Socket queuedSocket;
-		EndpointThread endpointThread;
-		Thread thread;
 		Logger.info("Server started\n" + "Port: " + getPort() + "\n");
 		while (running) {
 			try {
+				evalQueuedRequests(requestsQueue);
 				currentSocket = serverSocket.accept();
 				if (!running) break;
-				if (requestsRunning >= Server.REQUESTS_RUNNING_LIMIT) {
-					try {
-						requestsQueue.add(currentSocket);
-					} catch (IllegalStateException e) {
+				if (requestsRunning >= Server.REQUESTS_RUNNING_LIMIT)
+					// trashes the socket if the queue is full
+					if (!requestsQueue.offer(currentSocket))
 						continue;
-					}
-					continue;
-				}
-				queuedSocket = requestsQueue.poll();
-				if (queuedSocket != null) {
-					requestsQueue.add(currentSocket);
-					currentSocket = queuedSocket;
-				}
-				endpointThread = new EndpointThread(
-						this,
-						currentSocket
-				);
-				thread = new Thread(endpointThread);
-				thread.start();
-			} catch (IOException exception) {
+				runEndpointThread(currentSocket);
+			} catch (IOException | NullPointerException exception) {
 				Logger.error(exception.getMessage());
 			}
 		}
 		Logger.info("Server stopped\n");
+	}
+
+	private void evalQueuedRequests(LinkedBlockingQueue<Socket> queue) throws IOException {
+		Socket socket;
+		while (requestsRunning < Server.REQUESTS_RUNNING_LIMIT && (socket = queue.poll()) != null) {
+			runEndpointThread(socket);
+			requestsRunning++;
+		}
+	}
+
+	private void runEndpointThread(Socket socket) throws IOException {
+		EndpointThread endpointThread = new EndpointThread(
+				this,
+				socket
+		);
+		Thread thread = new Thread(endpointThread);
+		thread.start();
 	}
 
 	public RoutesHandler getRoutesHandler() {
