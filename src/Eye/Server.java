@@ -75,10 +75,8 @@ public class Server implements Runnable {
 
 	private void evalQueuedRequests(LinkedBlockingQueue<Socket> queue) throws IOException {
 		Socket socket;
-		while (requestsRunning < Server.REQUESTS_RUNNING_LIMIT && (socket = queue.poll()) != null) {
+		while (requestsRunning < Server.REQUESTS_RUNNING_LIMIT && (socket = queue.poll()) != null)
 			runEndpointThread(socket);
-			requestsRunning++;
-		}
 	}
 
 	private void runEndpointThread(Socket socket) throws IOException {
