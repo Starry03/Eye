@@ -19,7 +19,7 @@ public class Main {
 		int PORT = 7777;
 
 		RoutesHandler routesHandler = new RoutesHandler();
-		routesHandler.addRoute(new Root());
+		routesHandler.addRoute(new Index());
 		routesHandler.addRoute(new Datas());
 		Server server = new Server(PORT, routesHandler);
 		Thread serverThread = new Thread(server);

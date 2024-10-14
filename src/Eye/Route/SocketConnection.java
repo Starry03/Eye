@@ -24,12 +24,8 @@ public class SocketConnection extends ProtectedRoute {
 	}
 
 	@Override
-	public Response response() {
-		try {
-			socket.setKeepAlive(false);
-		} catch (SocketException e) {
-			Logger.error(e.getMessage());
-		}
+	protected Response response() {
+		stopConnection();
 		return new HTML("Default response");
 	}
 
@@ -40,5 +36,13 @@ public class SocketConnection extends ProtectedRoute {
 	public void send(byte[] response) throws IOException {
 		int length = response.length;
 		ResponseSender.writeResponse(response, length, socket.getOutputStream());
+	}
+
+	public void stopConnection() {
+		try {
+			socket.setKeepAlive(false);
+		} catch (SocketException e) {
+			Logger.error(e.getMessage());
+		}
 	}
 }

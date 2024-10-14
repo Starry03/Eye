@@ -4,11 +4,13 @@ import Eye.Logger.Logger;
 import Eye.RequestHandler;
 import Eye.Route.Route;
 import Eye.Route.RoutesHandler;
+import Eye.Route.SocketConnection;
 import Eye.Security.SecurityChecker;
 import Eye.Server;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,6 +34,11 @@ public abstract class ResponseSender {
 	public static void send(String path, OutputStream outputStream,
 	                        RoutesHandler routesHandler, RequestHandler requestHandler) {
 		Route route = routesHandler.getRoutes().get(path);
+		if (route instanceof SocketConnection)
+		{
+			handleSocketResponse((SocketConnection) route);
+			return;
+		}
 		if (route != null)
 			sendRouteResponse(route, outputStream, requestHandler);
 		else
@@ -129,5 +136,16 @@ public abstract class ResponseSender {
 	 */
 	public static void writeResponse(String response, int len, OutputStream outputStream) {
 		writeResponse(response.getBytes(StandardCharsets.UTF_8), len, outputStream);
+	}
+
+	private static void handleSocketResponse(SocketConnection route) {
+		try {
+			route.getResponse();
+			route.stopConnection();
+		}
+		catch (IOException e)
+		{
+			Logger.error(e.getMessage());
+		}
 	}
 }

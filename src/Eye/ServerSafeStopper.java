@@ -19,6 +19,7 @@ class ServerSafeStopper implements Runnable {
 		scanner.nextLine();
 		Logger.info("Server will stop at the next request\n");
 		server.setRunning(false);
+		scanner.close();
 	}
 
 	public synchronized boolean isExecuted() {

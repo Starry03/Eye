@@ -10,8 +10,9 @@ public class Main {
 
 		Server server = new Server(PORT);
 		Route[] routes = new Route[]{
-				new Root()
+				new Index()
 		};
+		System.out.println(server.getPort());
 		server.addRoutes(routes);
 		server.setCors(new Cors(
 				new String[]{"*"},
