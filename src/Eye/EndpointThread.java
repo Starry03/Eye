@@ -44,7 +44,7 @@ class EndpointThread implements Runnable {
 		executed = true;
 		server.addRequestRunning();
 		Scanner scanner = new Scanner(inputStream);
-		RequestHandler requestHandler = new RequestHandler(scanner, server);
+		RequestHandler requestHandler = new RequestHandler(scanner, server, socket);
 		String path = requestHandler.getPath();
 		ResponseSender.send(path, outputStream, server.getRoutesHandler(), requestHandler);
 		closeConnection();

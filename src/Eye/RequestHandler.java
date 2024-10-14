@@ -2,6 +2,7 @@ package Eye;
 
 import Eye.Security.Cors;
 
+import java.net.Socket;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -12,16 +13,17 @@ public class RequestHandler {
 	private final HashMap<String, String> queryParams;
 	private final LocalTime time;
 	private final Cors cors;
+	private final Socket socket;
 
-	public RequestHandler(Scanner scanner, Server server) {
+	public RequestHandler(Scanner scanner, Server server, Socket socket) {
 		this.time = LocalTime.now();
 		this.queryParams = new HashMap<>();
 		this.parseRequest(scanner);
 		this.cors = server.getCors();
+		this.socket = socket;
 	}
 
 	/**
-	 *
 	 * @return none if there isn't origin, cors headers otherwise
 	 */
 	public String getCorsHeaders() {
@@ -76,10 +78,16 @@ public class RequestHandler {
 		return headers.get("method");
 	}
 
-	public String getOrigin() { return headers.get("origin"); }
+	public String getOrigin() {
+		return headers.get("origin");
+	}
 
 	public String getHeader(String header) {
 		return headers.get(header);
+	}
+
+	public Socket getSocket() {
+		return socket;
 	}
 
 	public HashMap<String, String> getQueryParams() {

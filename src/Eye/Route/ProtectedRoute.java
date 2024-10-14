@@ -17,7 +17,7 @@ public class ProtectedRoute extends Route {
 	}
 
 	@Override
-	public final Response getResponse() throws IOException {
+	public Response getResponse() throws IOException {
 		return protectedResponse();
 	}
 
