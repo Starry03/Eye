@@ -12,7 +12,6 @@ public class Main {
 		Route[] routes = new Route[]{
 				new Index()
 		};
-		System.out.println(server.getPort());
 		server.addRoutes(routes);
 		server.setCors(new Cors(
 				new String[]{"*"},

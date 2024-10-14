@@ -30,6 +30,7 @@ out/
 !**/src/test/**/out/
 .idea/
 .idea/artifacts/
+./qodana.yaml
 
 ### Eclipse ###
 .apt_generated

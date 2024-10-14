@@ -10,7 +10,6 @@ import Eye.Server;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,15 +33,16 @@ public abstract class ResponseSender {
 	public static void send(String path, OutputStream outputStream,
 	                        RoutesHandler routesHandler, RequestHandler requestHandler) {
 		Route route = routesHandler.getRoutes().get(path);
-		if (route instanceof SocketConnection)
-		{
+		if (route == null) {
+			sendFileResponse(outputStream, requestHandler, null);
+			return;
+		}
+		route.setRequestHandler(requestHandler);
+		if (route instanceof SocketConnection) {
 			handleSocketResponse((SocketConnection) route);
 			return;
 		}
-		if (route != null)
-			sendRouteResponse(route, outputStream, requestHandler);
-		else
-			sendFileResponse(outputStream, requestHandler, null);
+		sendRouteResponse(route, outputStream, requestHandler);
 	}
 
 	/**
@@ -53,7 +53,6 @@ public abstract class ResponseSender {
 	 * @param requestHandler request handler
 	 */
 	private static void sendRouteResponse(Route route, OutputStream outputStream, RequestHandler requestHandler) {
-		route.setRequestHandler(requestHandler);
 		try {
 			Response response = route.getResponse();
 			if (response.getPath() != null) {
@@ -142,9 +141,7 @@ public abstract class ResponseSender {
 		try {
 			route.getResponse();
 			route.stopConnection();
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			Logger.error(e.getMessage());
 		}
 	}

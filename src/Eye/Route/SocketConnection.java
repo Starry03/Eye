@@ -10,17 +10,21 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class SocketConnection extends ProtectedRoute {
-	private final Socket socket;
+	private Socket socket;
 
 	public SocketConnection(String path) {
 		super(path);
-		socket = getRequestHandler().getSocket();
+	}
+
+	@Override
+	public Response getResponse() throws IOException {
+		this.socket = getRequestHandler().getSocket();
 		try {
 			socket.setKeepAlive(true);
 		} catch (SocketException e) {
 			Logger.error(e.getMessage());
 		}
-
+		return super.getResponse();
 	}
 
 	@Override

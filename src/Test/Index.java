@@ -8,6 +8,7 @@ import java.io.IOException;
 public class Index extends SocketConnection {
 	public Index() {
 		super("/");
+		setProtected(false);
 	}
 
 	@Override
