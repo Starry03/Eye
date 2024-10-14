@@ -10,10 +10,6 @@
 - Memory safe response
 - Routes
 
-## Todo
-
-- fix cors
-
 ## How to use
 
 ### Create server

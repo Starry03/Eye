@@ -55,7 +55,8 @@ public class Server implements Runnable {
 		Thread serverSafeStopperThread = new Thread(serverSafeStopper);
 		serverSafeStopperThread.start();
 		Socket currentSocket;
-		Logger.info("Server started\n" + "Port: " + getPort() + "\n");
+		Logger.info("Server started");
+		Logger.info("Port: " + getPort());
 		while (running) {
 			try {
 				evalQueuedRequests(requestsQueue);
@@ -116,10 +117,20 @@ public class Server implements Runnable {
 		Server.rootPath = Path.of(path);
 	}
 
+	/**
+	 * Adds route
+	 *
+	 * @param route path
+	 */
 	public void addRoute(Route route) {
 		routesHandler.addRoute(route);
 	}
 
+	/**
+	 * Adds array of routes
+	 *
+	 * @param route routes array
+	 */
 	public void addRoutes(Route[] route) {
 		routesHandler.addRoutes(route);
 	}

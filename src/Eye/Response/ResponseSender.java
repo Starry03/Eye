@@ -92,6 +92,7 @@ public abstract class ResponseSender {
 				res = new ByteStreamResponse(absPath.toString(), requestHandler, routeResponse.getContentType());
 			else res = new ByteStreamResponse(absPath.toString(), requestHandler);
 			res.streamBytes(outputStream);
+			Logger.info(requestHandler.getPath() + " OK");
 		} catch (IOException e) {
 			writeResponse(Responses.SERVER_ERROR, -2, outputStream);
 			Logger.error(requestHandler.toString() + "\nResponse: server error");
