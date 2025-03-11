@@ -31,12 +31,10 @@ public abstract class ResponseSender {
 	 * @param requestHandler request handler
 	 */
 	public static void send(String path, OutputStream outputStream,
-	                        RoutesHandler routesHandler, RequestHandler requestHandler) {
+			RoutesHandler routesHandler, RequestHandler requestHandler) {
 		Route route = routesHandler.getRoutes().get(path);
-		if (route == null) {
-			sendFileResponse(outputStream, requestHandler, null);
+		if (route == null)
 			return;
-		}
 		route.setRequestHandler(requestHandler);
 		if (route instanceof SocketConnection) {
 			handleSocketResponse((SocketConnection) route);
@@ -73,7 +71,8 @@ public abstract class ResponseSender {
 	 * @param outputStream   output stream
 	 * @param requestHandler request handler
 	 */
-	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler, Response routeResponse) {
+	private static void sendFileResponse(OutputStream outputStream, RequestHandler requestHandler,
+			Response routeResponse) {
 		Path absPath;
 		ByteStreamResponse res;
 
@@ -84,8 +83,7 @@ public abstract class ResponseSender {
 				absPath = Paths.get(Server.getRootPath().toString(), requestHandler.getPath());
 		} catch (Exception e) {
 			writeResponse(Responses.BAD_REQUEST, -2, outputStream);
-			Logger.warning
-					(requestHandler.toString() + "\nResponse: bad request");
+			Logger.warning(requestHandler.toString() + "\nResponse: bad request");
 			return;
 		}
 		try {
@@ -96,7 +94,8 @@ public abstract class ResponseSender {
 			}
 			if (routeResponse != null)
 				res = new ByteStreamResponse(absPath.toString(), requestHandler, routeResponse.getContentType());
-			else res = new ByteStreamResponse(absPath.toString(), requestHandler);
+			else
+				res = new ByteStreamResponse(absPath.toString(), requestHandler);
 			res.streamBytes(outputStream);
 			Logger.info(requestHandler.getPath() + " OK");
 		} catch (IOException e) {
@@ -114,11 +113,13 @@ public abstract class ResponseSender {
 	public static void writeResponse(byte[] response, int len, OutputStream outputStream) {
 		byte[] buf;
 
-		if (len == -1) return;
+		if (len == -1)
+			return;
 		if (len < response.length && len != -2) {
 			buf = new byte[len];
 			System.arraycopy(response, 0, buf, 0, len);
-		} else buf = response;
+		} else
+			buf = response;
 		try {
 			outputStream.write(buf);
 			outputStream.flush();

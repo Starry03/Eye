@@ -50,6 +50,12 @@ public class RequestHandler {
 		return headers.keySet().toArray(new String[0]);
 	}
 
+	/**
+	 * Parse the request and store the headers in a HashMap
+	 *
+	 * @param scanner Scanner object to read the request
+	 * @implNote untested
+	 */
 	private void parseRequest(Scanner scanner) {
 		if (!scanner.hasNextLine()) return;
 		String line = scanner.nextLine();
