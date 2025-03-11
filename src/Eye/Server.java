@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 public class Server implements Runnable {
 	public static int DEFAULT_PORT = 3000;
@@ -22,6 +23,7 @@ public class Server implements Runnable {
 	private final RoutesHandler routesHandler = new RoutesHandler();
 	private static Path rootPath = Path.of("./");
 	private Cors cors = new Cors();
+	private final Semaphore mutex = new Semaphore(1);
 
 	/**
 	 * @param port server port
@@ -48,7 +50,8 @@ public class Server implements Runnable {
 
 	@Override
 	public synchronized void run() {
-		if (executed) return;
+		if (executed)
+			return;
 		executed = true;
 		LinkedBlockingQueue<Socket> requestsQueue = new LinkedBlockingQueue<>(Server.REQUEST_QUEUE_LIMIT);
 		ServerSafeStopper serverSafeStopper = new ServerSafeStopper(this);
@@ -61,7 +64,8 @@ public class Server implements Runnable {
 			try {
 				evalQueuedRequests(requestsQueue);
 				currentSocket = serverSocket.accept();
-				if (!running) break;
+				if (!running)
+					break;
 				if (requestsRunning >= Server.REQUESTS_RUNNING_LIMIT)
 					// trashes the socket if the queue is full
 					if (!requestsQueue.offer(currentSocket))
@@ -83,8 +87,7 @@ public class Server implements Runnable {
 	private void runEndpointThread(Socket socket) throws IOException {
 		EndpointThread endpointThread = new EndpointThread(
 				this,
-				socket
-		);
+				socket);
 		Thread thread = new Thread(endpointThread);
 		thread.start();
 	}
@@ -105,8 +108,19 @@ public class Server implements Runnable {
 		return running;
 	}
 
+	/**
+	 * 
+	 * @param running
+	 * @implNote thread-safe
+	 */
 	public void setRunning(boolean running) {
-		this.running = running;
+		try {
+			mutex.acquire();
+			this.running = running;
+			mutex.release();
+		} catch (InterruptedException e) {
+			Logger.error(e.getMessage());
+		}
 	}
 
 	public static Path getRootPath() {
@@ -143,12 +157,34 @@ public class Server implements Runnable {
 		this.cors = cors;
 	}
 
+	/**
+	 * Adds request running
+	 * 
+	 * @implNote thread-safe
+	 */
 	public void addRequestRunning() {
-		requestsRunning++;
+		try {
+			mutex.acquire();
+			requestsRunning++;
+			mutex.release();
+		} catch (InterruptedException e) {
+			Logger.error(e.getMessage());
+		}
 	}
 
+	/**
+	 * Removes request running
+	 * 
+	 * @implNote thread-safe
+	 */
 	public void removeRequestRunning() {
-		requestsRunning--;
+		try {
+			mutex.acquire();
+			requestsRunning--;
+			mutex.release();
+		} catch (InterruptedException e) {
+			Logger.error(e.getMessage());
+		}
 	}
 
 	public void setRequestsRunningLimit(int limit) {
